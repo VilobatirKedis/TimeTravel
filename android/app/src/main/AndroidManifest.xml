@@ -2,7 +2,7 @@
     package="com.example.time_travel">
    <application
         android:label="time_travel"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

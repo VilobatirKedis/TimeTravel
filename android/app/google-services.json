@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "2508594105",
+    "project_id": "time-travel-60e47",
+    "storage_bucket": "time-travel-60e47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2508594105:android:d6f5039669b110b4d9f468",
+        "android_client_info": {
+          "package_name": "kedis_lugini.timetravel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2508594105-74bp8gk4ud9ag48eu1ed3h7r4ar9o0su.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kedis_lugini.timetravel",
+            "certificate_hash": "08f0beb9ccfc262c8febbec1ab50283797c1bc43"
+          }
+        },
+        {
+          "client_id": "2508594105-pn62j8ai5j5s2neooh7vfron87tm701c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSTovr5Pcf0h5nZmeOwcwaQjUVrxRN01Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "2508594105-pn62j8ai5j5s2neooh7vfron87tm701c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

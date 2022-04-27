@@ -1,6 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:time_travel/screens/camera/main.dart';
+//import 'package:time_travel/screens/camera/main.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
+import 'package:time_travel/utils/auth_service.dart';
+import 'package:time_travel/utils/constants.dart';
+
+import '../../utils/location.dart';
+import '../camera/main.dart';
 
 Future<CameraDescription> openCameras() async {
   final cameras = await availableCameras();
@@ -17,121 +25,99 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-  
   @override
   Widget build(BuildContext context) {
+    const String token = 'sk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFyN2cyMzA2N2wzam5yejQ4eWo5ZTgifQ.jNioMcy0j9nicWrxUQqnRQ';
+    const String style = 'mapbox://styles/vilokedis/cl2asom8j001l14rvm832r12s';
     Size size = MediaQuery.of(context).size;
-
-    final _widgetOptions = [
-      const Text(
-        'Discover',
-        //style: optionStyle,
-      ),
-      const Text(
-        'Discover',
-        //style: optionStyle,
-      ),
-      FutureBuilder(
-        future: openCameras(),
-        builder: (context, AsyncSnapshot<CameraDescription> snapshot) {
-          if(snapshot.hasData) {  
-            return TakePictureScreen(camera: snapshot.data!);
-          }
-
-          else return const CircularProgressIndicator();
-        },
-      ),
-      const Text(
-        'Discover',
-        //style: optionStyle,
-      ),
-      ElevatedButton(
-        child: Text("Log Out"),
-        onPressed: () {} /*{
-          final provider = Provider.of<GoogleSignUpProvider>(context, listen: false);
-          provider.googleLogout();
-        }*/,
-      )
-    ];
-
-    return SafeArea(
-        child: Scaffold(
-          body:_widgetOptions.elementAt(_selectedIndex),
-
-          bottomNavigationBar: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4.0), 
-            topRight: Radius.circular(4.0), 
-          ),
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              hoverColor: Colors.transparent,
+    print(size.width);
+    
+    return Stack(
+      children: [ 
+        Scaffold(
+          body: MapboxComponent(token: token, style: style),
+          floatingActionButton: ElevatedButton(
+            onPressed: () {
+              FutureBuilder(
+                future: openCameras(),
+                builder: (context, AsyncSnapshot<CameraDescription> snapshot) {
+                  if(snapshot.hasData) {  
+                    return TakePictureScreen(camera: snapshot.data!);
+                  }
+      
+                  else return const CircularProgressIndicator();
+                },
+              );
+            }, 
+            child: Text(
+              "SCAN A MONUMENT",
+              style: TextStyle(
+                fontSize: size.width * 0.04
+              ),
             ),
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              unselectedItemColor: Colors.black45,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home_rounded,
-                    size: size.height * 0.032,
-                  ),
-                  label: '',
-                  //backgroundColor: kButtonColor
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.search_rounded,
-                    size: size.height * 0.032,
-                  ),
-                  label: '',
-                  
-                  //backgroundColor: kButtonColor
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.camera_alt_rounded,
-                    size: size.height * 0.032,
-                  ),
-                  label: '',
-                  //backgroundColor: kButtonColor
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.thumb_up_rounded,
-                    size: size.height * 0.029,
-                  ),
-                  label: '',
-                  //backgroundColor: kButtonColor
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.person_rounded,
-                    size: size.height * 0.032,
-                  ),
-                  label: '',
-                  //backgroundColor: kButtonColor
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.white,
-              backgroundColor: Colors.deepPurpleAccent,
-              onTap: _onItemTapped,
-            ),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50)
+              ),
+              padding: EdgeInsets.fromLTRB(size.width * 0.27, 14, size.width * 0.27, 14),
+              primary: kMainColor
+            )
           ),
+        ),
+        SafeArea(
+          child: ElevatedButton.icon(
+            onPressed: () {}, 
+            icon: Icon(Icons.more_horiz_rounded),
+            label: Text(''),
+            style: ElevatedButton.styleFrom(
+            )
+          )
         )
-      )
+      ]
+    );
+  }
+}
+
+class MapboxComponent extends StatelessWidget {
+  const MapboxComponent({
+    Key? key,
+    required this.token,
+    required this.style,
+  }) : super(key: key);
+
+  final String token;
+  final String style;
+
+  @override
+  Widget build(BuildContext context) {
+    return MapboxMap(
+      accessToken: token,
+      styleString: style,
+      attributionButtonPosition: AttributionButtonPosition.TopRight,
+      compassViewPosition: CompassViewPosition.TopRight,
+      initialCameraPosition: const CameraPosition(
+        zoom: 15.0,
+        target: LatLng(14.508, 46.048),
+      ),
+      
+      onMapCreated: (MapboxMapController controller) async {
+        final result = await acquireCurrentLocation();
+        
+        await controller.animateCamera(
+          CameraUpdate.newLatLng(result),
+        );
+
+        await controller.addCircle(
+          CircleOptions(
+            circleRadius: 8.0,
+            circleColor: '#006992',
+            circleOpacity: 0.8,
+            
+            geometry: result,
+            draggable: false,
+          ),
+        );
+      }
     );
   }
 }

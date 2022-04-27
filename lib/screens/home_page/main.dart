@@ -1,20 +1,12 @@
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-//import 'package:time_travel/screens/camera/main.dart';
+import 'package:time_travel/screens/camera/main.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:path/path.dart';
-import 'package:provider/provider.dart';
-import 'package:time_travel/utils/auth_service.dart';
 import 'package:time_travel/utils/constants.dart';
 
 import '../../utils/location.dart';
-import '../camera/main.dart';
-
-Future<CameraDescription> openCameras() async {
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
-  return firstCamera;
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({ Key? key }) : super(key: key);
@@ -28,25 +20,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     const String token = 'sk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFyN2cyMzA2N2wzam5yejQ4eWo5ZTgifQ.jNioMcy0j9nicWrxUQqnRQ';
-    const String style = 'mapbox://styles/vilokedis/cl2asom8j001l14rvm832r12s';
+    const String style = 'mapbox://styles/vilokedis/cl2hy1oal003w14o7008xs3s1';
     Size size = MediaQuery.of(context).size;
-    print(size.width);
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     
     return Stack(
       children: [ 
         Scaffold(
+          key: _scaffoldKey,
           body: MapboxComponent(token: token, style: style),
           floatingActionButton: ElevatedButton(
             onPressed: () {
-              FutureBuilder(
-                future: openCameras(),
-                builder: (context, AsyncSnapshot<CameraDescription> snapshot) {
-                  if(snapshot.hasData) {  
-                    return TakePictureScreen(camera: snapshot.data!);
-                  }
-      
-                  else return const CircularProgressIndicator();
-                },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CameraScreen()),
               );
             }, 
             child: Text(
@@ -63,14 +50,45 @@ class _HomePageState extends State<HomePage> {
               primary: kMainColor
             )
           ),
+          drawer: Drawer(
+            elevation: 1000,
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: [
+                ListTile(
+                  title: const Text('Item 1'),
+                  onTap: () {
+                    // Update the state of the app.
+                    // ...
+                  },
+                ),
+                ListTile(
+                  title: const Text('Item 2'),
+                  onTap: () {
+                    // Update the state of the app.
+                    // ...
+                  },
+                ),
+              ],
+            )
+          ),
         ),
         SafeArea(
-          child: ElevatedButton.icon(
-            onPressed: () {}, 
-            icon: Icon(Icons.more_horiz_rounded),
-            label: Text(''),
-            style: ElevatedButton.styleFrom(
-            )
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                _scaffoldKey.currentState?.openDrawer();
+              }, 
+              icon: const Icon(Icons.more_horiz_rounded),
+              label: const Text(''),
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.fromLTRB(7.5, 10, 0, 10),
+                primary: kMainColor
+              ),
+            ),
           )
         )
       ]
@@ -93,8 +111,9 @@ class MapboxComponent extends StatelessWidget {
     return MapboxMap(
       accessToken: token,
       styleString: style,
-      attributionButtonPosition: AttributionButtonPosition.TopRight,
-      compassViewPosition: CompassViewPosition.TopRight,
+      attributionButtonMargins: const Point(-30,-30),
+      logoViewMargins: const Point(-30,-30),
+      compassViewMargins: const Point(-30,-30),
       initialCameraPosition: const CameraPosition(
         zoom: 15.0,
         target: LatLng(14.508, 46.048),

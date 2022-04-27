@@ -24,6 +24,8 @@
 		<true/>
 		<key>MGLMapboxAccessToken</key>
 		<string>pk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFxNjV2MDA3d2szZXJ1dXBqb2Y4d3kifQ.we7gt1JJFXtMBG9d4mx7TA</string>
+		<key>NSCameraUsageDescription</key>
+		<string>We use your camera to retrieve the images needed to recognize the monument</string>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>

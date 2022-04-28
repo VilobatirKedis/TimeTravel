@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:time_travel/screens/authentication/sign_in.dart';
 import 'package:time_travel/screens/home_page/main.dart';
 
+import '../welcome/main.dart';
+
 class AuthenticationWrapper extends StatelessWidget {
   const AuthenticationWrapper({ Key? key }) : super(key: key);
 
@@ -16,6 +18,6 @@ class AuthenticationWrapper extends StatelessWidget {
       return HomePage();
     }
 
-    return SafeArea(child: SignInPage());
+    return SafeArea(child: Welcome());
   }
 }

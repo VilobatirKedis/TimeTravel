@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:provider/provider.dart';
 import 'package:time_travel/screens/authentication/authentication_wrapper.dart';
 import 'package:time_travel/utils/auth_service.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
     print('Error in fetching the cameras: $e');
   }
   await Firebase.initializeApp();
+  await FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
   runApp(const MyApp());
 }
 
@@ -30,9 +32,9 @@ class MyApp extends StatelessWidget {
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
-
         StreamProvider(
-          create: (context) => context.read<AuthenticationService>().authStateChanges,
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
           initialData: null,
         )
       ],
@@ -40,7 +42,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: AuthenticationWrapper(),
       ),
-
     );
   }
 }

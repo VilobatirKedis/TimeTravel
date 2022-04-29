@@ -7,17 +7,17 @@ import 'package:time_travel/screens/home_page/main.dart';
 import '../welcome/main.dart';
 
 class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({ Key? key }) : super(key: key);
+  const AuthenticationWrapper({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
-    
+
     // ignore: unnecessary_null_comparison
-    if(firebaseUser != null) {
+    if (firebaseUser != null) {
       return HomePage();
     }
 
-    return SafeArea(child: Welcome());
+    return SignInPage();
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:time_travel/screens/authentication/sign_up.dart';
 import 'package:time_travel/utils/constants.dart';
+
+import '../authentication/sign_in.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -9,40 +12,20 @@ class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //FlutterStatusbarcolor.setStatusBarColor(kMainColor);
-
+    
     return Scaffold(
       backgroundColor: kMainColor,
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: size.height * 0.25),
+            child: Image.asset("assets/images/splash_screen/logo.png"),
+          ),
+          SignUpButton(),
+          SignInButton()
+        ]
+      )
     );
-  }
-}
-
-class Header extends StatelessWidget {
-  const Header({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    return RichText(
-        textAlign: TextAlign.center,
-        text: /*TextSpan(text: "Hello")*/ TextSpan(
-            text: "Your place to",
-            style: TextStyle(
-                fontSize: size.width * 0.15,
-                fontWeight: FontWeight.w700,
-                color: kMainColor),
-            children: <TextSpan>[
-              TextSpan(
-                  text: " share ",
-                  style: TextStyle(
-                      fontSize: size.width * 0.15,
-                      fontWeight: FontWeight.w700,
-                      color: kMainColor)),
-              TextSpan(text: "books"),
-            ]));
   }
 }
 
@@ -55,18 +38,24 @@ class SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return ElevatedButton.icon(
+    return Padding(
+      padding: EdgeInsets.only(top: size.height * 0.1),
+      child: ElevatedButton(
         onPressed: () {
           //TODO: Add SignUp page
-          //Navigator.push(context, RouteManager.leftToRight(() {return SignUp();}));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SignUpPage()),
+          );
         },
-        label: Icon(Icons.arrow_right_alt_rounded, size: size.width * 0.07),
-        icon: Text("Sign Up", style: TextStyle(fontSize: size.width * 0.05)),
+        child: Text("Sign Up", style: TextStyle(fontSize: size.width * 0.06, color: kMainColor, fontWeight: FontWeight.w800)),
         style: ElevatedButton.styleFrom(
-            primary: kMainColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            padding: kButtonInset));
+            primary: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            padding: EdgeInsets.fromLTRB(size.width * 0.35, size.height * 0.017, size.width * 0.35, size.height * 0.017),
+          )
+      ),
+    );
   }
 }
 
@@ -79,20 +68,23 @@ class SignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return ElevatedButton(
+    return Padding(
+      padding: EdgeInsets.only(top: size.height * 0.02),
+      child: ElevatedButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return Scaffold();
-          }));
+          //TODO: Add SignUp page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SignInPage()),
+          );
         },
-        child: Text(
-          "Sign In",
-          style: TextStyle(fontSize: size.width * 0.04),
-        ),
+        child: Text("Log In", style: TextStyle(fontSize: size.width * 0.04, color: Colors.black, fontWeight: FontWeight.w800)),
         style: ElevatedButton.styleFrom(
-            primary: kMainColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            padding: kSecondaryButtonInset));
+            primary: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            padding: EdgeInsets.fromLTRB(size.width * 0.15, size.height * 0.017, size.width * 0.15, size.height * 0.017),
+          )
+      ),
+    );
   }
 }

@@ -18,6 +18,6 @@ class AuthenticationWrapper extends StatelessWidget {
       return HomePage();
     }
 
-    return SignInPage();
+    return Welcome();
   }
 }

@@ -17,11 +17,13 @@ class SignInPage extends StatelessWidget {
     //FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     final firebaseUser = context.watch<User?>();
 
-    if(firebaseUser != null) {
+    if (firebaseUser != null) {
       return HomePage();
-    }
-    else {
-      return Form(emailController: emailController, passwordController: passwordController);
+    } else {
+      return SafeArea(
+          child: Form(
+              emailController: emailController,
+              passwordController: passwordController));
     }
   }
 }
@@ -38,28 +40,72 @@ class Form extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(kMainColor);
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kMainColor,
       body: Column(
         children: [
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: "Email",
+          Padding(
+            padding: EdgeInsets.only(top: size.width * 0.4),
+            child: TextField(
+              controller: emailController,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.email_rounded),
+                labelText: 'Password',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 2
+                  )
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 2
+                  )
+                ),
+              ),
+              style: TextStyle(color: Colors.white),
+              onChanged: (value) {
+                // do something
+              },
             ),
           ),
           TextField(
             controller: passwordController,
-            decoration: const InputDecoration(
-              labelText: "Password",
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.email_rounded),
+              labelText: 'Password',
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(
+                  color: Colors.white,
+                  width: 2
+                )
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(
+                  color: Colors.white,
+                  width: 2
+                )
+              ),
             ),
+            style: TextStyle(color: Colors.white),
+            onChanged: (value) {
+              // do something
+            },
           ),
           ElevatedButton(
             onPressed: () {
               context.read<AuthenticationService>().signIn(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim(),
-              );
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim(),
+                  );
             },
             child: Text("Sign in"),
           )

@@ -4,7 +4,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:time_travel/screens/authentication/sign_up.dart';
 import 'package:time_travel/utils/constants.dart';
 
-import '../authentication/sign_in.dart';
+import '../authentication/log_in.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class Welcome extends StatelessWidget {
             child: Image.asset("assets/images/splash_screen/logo.png"),
           ),
           SignUpButton(),
-          SignInButton()
+          LogInButton()
         ]
       )
     );
@@ -48,9 +48,9 @@ class SignUpButton extends StatelessWidget {
             MaterialPageRoute(builder: (context) => SignUpPage()),
           );
         },
-        child: Text("Sign Up", style: TextStyle(fontSize: size.width * 0.06, color: kMainColor, fontWeight: FontWeight.w800)),
+        child: Text("Sign Up", style: TextStyle(fontSize: size.width * 0.06, color: Colors.white, fontWeight: FontWeight.w800)),
         style: ElevatedButton.styleFrom(
-            primary: Colors.white,
+            primary: kSecondaryColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
             padding: EdgeInsets.fromLTRB(size.width * 0.35, size.height * 0.017, size.width * 0.35, size.height * 0.017),
           )
@@ -59,8 +59,8 @@ class SignUpButton extends StatelessWidget {
   }
 }
 
-class SignInButton extends StatelessWidget {
-  const SignInButton({
+class LogInButton extends StatelessWidget {
+  const LogInButton({
     Key? key,
   }) : super(key: key);
 
@@ -75,12 +75,12 @@ class SignInButton extends StatelessWidget {
           //TODO: Add SignUp page
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SignInPage()),
+            MaterialPageRoute(builder: (context) => LogInPage()),
           );
         },
-        child: Text("Log In", style: TextStyle(fontSize: size.width * 0.04, color: Colors.black, fontWeight: FontWeight.w800)),
+        child: Text("Log In", style: TextStyle(fontSize: size.width * 0.04, color: Colors.white, fontWeight: FontWeight.w800)),
         style: ElevatedButton.styleFrom(
-            primary: Colors.white,
+            primary: kSecondaryColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
             padding: EdgeInsets.fromLTRB(size.width * 0.15, size.height * 0.017, size.width * 0.15, size.height * 0.017),
           )

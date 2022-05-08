@@ -13,31 +13,25 @@ import '../../utils/location.dart';
 MapboxMapController? globalController = null;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({ Key? key }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void dispose() {
-    globalController?.dispose();
-    super.dispose();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
-    const String token =
-        'sk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFyN2cyMzA2N2wzam5yejQ4eWo5ZTgifQ.jNioMcy0j9nicWrxUQqnRQ';
+    const String token = 'sk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFyN2cyMzA2N2wzam5yejQ4eWo5ZTgifQ.jNioMcy0j9nicWrxUQqnRQ';
     const String style = 'mapbox://styles/vilokedis/cl2hy1oal003w14o7008xs3s1';
-
+    
     Size size = MediaQuery.of(context).size;
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+    
     return Stack(
-      children: [
+      children: [ 
         Scaffold(
           key: _scaffoldKey,
           body: MapboxComponent(token: token, style: style),
@@ -48,21 +42,18 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(builder: (context) => CameraScreen()),
               );
             },
-            icon: Icon(Icons.camera_alt_rounded),
+            icon: Icon(Icons.camera_alt_rounded), 
             label: Text(
               "SCAN A MONUMENT",
-              style: TextStyle(fontSize: size.width * 0.04),
+              style: TextStyle(
+                fontSize: size.width * 0.04
+              ),
             ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50)
               ),
-              padding: EdgeInsets.fromLTRB(
-                size.width * 0.23,
-                size.height * 0.017,
-                size.width * 0.23,
-                size.height * 0.017
-              ),
+              padding: EdgeInsets.fromLTRB(size.width * 0.23, size.height * 0.017, size.width * 0.23, size.height * 0.017),
               primary: kMainColor
             )
           ),
@@ -74,7 +65,9 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const DrawerHeader(
                   child: Text("Time Travel"),
-                  decoration: BoxDecoration(color: kMainColor),
+                  decoration: BoxDecoration(
+                    color: kMainColor
+                  ),
                   padding: EdgeInsets.all(55),
                 ),
                 ListTile(
@@ -102,10 +95,12 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
-                  },
+
+                  }, 
                   icon: const Icon(
                     Icons.more_horiz_rounded,
-                    color: kMainColor, size: 28
+                    color: kMainColor,
+                    size: 28
                   ),
                   label: const Text(''),
                   style: ElevatedButton.styleFrom(
@@ -121,12 +116,16 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     final result = await acquireCurrentLocation();
-
+        
                     await globalController?.animateCamera(
                       CameraUpdate.newLatLng(result),
                     );
-                  },
-                  icon: const Icon(Icons.location_pin, color: kMainColor, size: 28),
+                  }, 
+                  icon: const Icon(
+                    Icons.location_pin,
+                    color: kMainColor,
+                    size: 28
+                  ),
                   label: const Text(''),
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
@@ -158,9 +157,9 @@ class MapboxComponent extends StatelessWidget {
     return MapboxMap(
       accessToken: token,
       styleString: style,
-      attributionButtonMargins: const Point(-30, -30),
-      logoViewMargins: const Point(-30, -30),
-      compassViewMargins: const Point(-30, -30),
+      attributionButtonMargins: const Point(-30,-30),
+      logoViewMargins: const Point(-30,-30),
+      compassViewMargins: const Point(-30,-30),
       trackCameraPosition: true,
       myLocationEnabled: true,
       myLocationRenderMode: MyLocationRenderMode.COMPASS,
@@ -169,14 +168,14 @@ class MapboxComponent extends StatelessWidget {
         zoom: 15.0,
         target: LatLng(14.508, 46.048),
       ),
+      
       onMapCreated: (MapboxMapController controller) async {
         globalController = controller;
         final result = await acquireCurrentLocation();
-
+        
         await controller.animateCamera(
           CameraUpdate.newLatLng(result),
         );
-        //controller.dispose();
       }
     );
   }

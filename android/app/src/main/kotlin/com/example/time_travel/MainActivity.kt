@@ -1,4 +1,4 @@
-package com.example.time_travel
+package com.kedislugini.timetravel
 
 import io.flutter.embedding.android.FlutterActivity
 

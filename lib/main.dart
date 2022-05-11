@@ -27,22 +27,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return /*MultiProvider(
-      providers: [
-        Provider<AuthenticationService>(
-          create: (_) => AuthenticationService(FirebaseAuth.instance),
-        ),
-        StreamProvider(
-          create: (context) =>
-              context.read<AuthenticationService>().authStateChanges,
-          initialData: null,
-        )
-      ],
-      child: */
-        MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LogInPage(),
     );
-    //);
   }
 }

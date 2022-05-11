@@ -1,16 +1,14 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:time_travel/utils/auth_service.dart';
 import 'package:time_travel/utils/form_validator.dart';
-
-import '../../utils/constants.dart';
-import '../home_page/main.dart';
+import 'package:time_travel/utils/constants.dart';
+import 'package:time_travel/screens/home_page/main.dart';
 
 class LogInPage extends StatefulWidget {
   @override
@@ -48,12 +46,12 @@ class _LogInPageState extends State<LogInPage> {
     Size size = MediaQuery.of(context).size;
 
     return FutureBuilder(
-        future: _initializeFirebase(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            FlutterStatusbarcolor.setStatusBarColor(kMainColor);
-            return SafeArea(
-                child: Scaffold(
+      future: _initializeFirebase(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          FlutterStatusbarcolor.setStatusBarColor(kMainColor);
+          return SafeArea(
+            child: Scaffold(
               backgroundColor: kMainColor,
               body: SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -124,16 +122,20 @@ class _LogInPageState extends State<LogInPage> {
                       child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            User? user = await AuthenticationService
-                                .signInUsingEmailPassword(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
-                            );
+                            User? user;
+                            try {
+                              user = await AuthenticationService.signInUsingEmailPassword(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                              );
+                            } catch (e) {
+                              credentialsErrorDialog(context, "Check your credentials and try again", size);
+                            }
 
                             if (user != null) {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage(user: user)),
+                                    builder: (context) => HomePage(user: user!)),
                               );
                             }
                           }
@@ -186,27 +188,40 @@ class _LogInPageState extends State<LogInPage> {
                   ],
                 ),
               ),
-            ));
-          }
-
-          return Center(child: CircularProgressIndicator());
-        });
+            )
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      }
+    );
   }
 }
 
-Future<void> credentialsErrorDialog(context, message) async {
+Future<void> credentialsErrorDialog(context, message, size) async {
   return showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) => AlertDialog(
-            title: const Text('Error with Log In'),
+            title: const Text('Error'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text(message),
-                  Text('Check your credentials and try again'),
+                  Text(message)
                 ],
               ),
+            ),
+            backgroundColor: kMainColor,
+            titleTextStyle: GoogleFonts.montserrat(
+              textStyle: Theme.of(context).textTheme.headline4,
+              fontSize: size.width * 0.04,
+              fontWeight: FontWeight.w700,
+              color: Colors.white
+            ),
+            contentTextStyle: GoogleFonts.montserrat(
+              textStyle: Theme.of(context).textTheme.headline4,
+              fontSize: size.width * 0.04,
+              fontWeight: FontWeight.w200,
+              color: Colors.white
             ),
           ));
 }
@@ -240,13 +255,14 @@ class GeneralTextField extends StatelessWidget {
       ),*/
       child: SizedBox(
         width: size.width * 0.95,
-        child: TextField(
-          /*validator: (value) {
-            if (label == "Password")
+        child: TextFormField(
+          validator: (value) {
+            if (label == "Password") {
               Validator.validatePassword(password: value!);
-            else
+            } else {
               Validator.validateEmail(email: value!);
-          },*/
+            }
+          },
           obscureText: label == "Password" ? true : false,
           controller: controller,
           cursorColor: kSecondaryColor,
@@ -292,7 +308,22 @@ class ThirdPartyLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () async {
-        if (service == "Google") await AuthenticationService.signInWithGoogle();
+        if (service == "Google") {
+          try {
+            await AuthenticationService.signInWithGoogle().then((user) => {
+              if(user != null) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(user: user)
+                  )
+                )
+              }
+            
+            });
+          } catch (e) {
+            credentialsErrorDialog(context, "Error with Google log in.", size);
+          }
+        }
       },
       icon: Image.asset(
         "assets/icons/${service.toLowerCase()}.png",

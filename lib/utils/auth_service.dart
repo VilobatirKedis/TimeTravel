@@ -52,6 +52,8 @@ class AuthenticationService {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided.');
       }
+    } catch (e) {
+      rethrow;
     }
 
     return user;
@@ -73,13 +75,12 @@ class AuthenticationService {
       await auth.signInWithCredential(credential);
       user = auth.currentUser;
       return user;
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-      throw e;
+    } catch (e) {
+      rethrow;
     }
   }
 
-  Future<void> signOutFromGoogle() async {
+  static Future<void> signOutFromGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     await _googleSignIn.signOut();

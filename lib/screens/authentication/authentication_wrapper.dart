@@ -15,7 +15,7 @@ class AuthenticationWrapper extends StatelessWidget {
 
     // ignore: unnecessary_null_comparison
     if (firebaseUser != null) {
-      return HomePage();
+      //return HomePage();
     }
 
     return LogInPage();

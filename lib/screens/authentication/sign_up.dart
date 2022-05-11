@@ -32,10 +32,7 @@ class SignUpPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              context.read<AuthenticationService>().signUp(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim(),
-              );
+              
             },
             child: Text("Sign up"),
           )

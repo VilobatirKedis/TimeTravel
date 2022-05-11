@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:provider/provider.dart';
 import 'package:time_travel/screens/authentication/authentication_wrapper.dart';
+import 'package:time_travel/screens/authentication/log_in.dart';
 import 'package:time_travel/utils/auth_service.dart';
 
 List<CameraDescription> cameras = [];
@@ -17,7 +18,6 @@ Future<void> main() async {
   } on CameraException catch (e) {
     print('Error in fetching the cameras: $e');
   }
-  await Firebase.initializeApp();
   await FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
   runApp(const MyApp());
 }
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return /*MultiProvider(
       providers: [
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
@@ -38,10 +38,11 @@ class MyApp extends StatelessWidget {
           initialData: null,
         )
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: AuthenticationWrapper(),
-      ),
+      child: */
+        MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: LogInPage(),
     );
+    //);
   }
 }

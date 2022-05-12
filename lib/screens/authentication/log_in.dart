@@ -49,7 +49,7 @@ class _LogInPageState extends State<LogInPage> {
       future: _initializeFirebase(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          FlutterStatusbarcolor.setStatusBarColor(kMainColor);
+          setStatusBarColor(kMainColor);
           return SafeArea(
             child: Scaffold(
               backgroundColor: kMainColor,

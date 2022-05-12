@@ -1,20 +1,17 @@
 import 'dart:math';
-
-import 'package:camera/camera.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
-import 'package:provider/provider.dart';
-import 'package:time_travel/screens/authentication/log_in.dart';
-import 'package:time_travel/screens/camera/main.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:time_travel/utils/auth_service.dart';
-import 'package:time_travel/utils/constants.dart';
 
-import '../../utils/location.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:time_travel/screens/authentication/log_in.dart';
+import 'package:time_travel/utils/auth_service.dart';
+
+import 'package:time_travel/utils/constants.dart';
+import 'package:time_travel/utils/location.dart';
+import 'package:time_travel/screens/camera/main.dart';
 
 MapboxMapController? globalController = null;
-bool isDrawerButtonVisible = true;
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -37,121 +34,202 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     const String token =
         'sk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFyN2cyMzA2N2wzam5yejQ4eWo5ZTgifQ.jNioMcy0j9nicWrxUQqnRQ';
-    const String style = 'mapbox://styles/vilokedis/cl2hy1oal003w14o7008xs3s1';
+    const String style = 'mapbox://styles/vilokedis/cl33c587m001914mk8eywqyia';
     final userToken = _currentUser.getIdToken();
 
     Size size = MediaQuery.of(context).size;
+    setStatusBarColor(Colors.transparent);
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final visibilityKey = GlobalKey();
-    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
 
-    return Stack(
-      children: [
-        Scaffold(
-          key: _scaffoldKey,
-          body: const MapboxComponent(token: token, style: style),
-          floatingActionButton: ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CameraScreen()),
-              );
-            },
-            icon: Icon(Icons.camera_alt_rounded),
-            label: Text(
-              "SCAN A MONUMENT",
-              style: TextStyle(fontSize: size.width * 0.04),
-            ),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.015, horizontal: size.width * 0.225),
-              primary: kSecondaryColor,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.elliptical(15, 15))),
-              side: const BorderSide(
-                width: 1,
-                color: kMainColor,
-              )
-            ),
+    return Scaffold(
+      key: _scaffoldKey,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      floatingActionButton: Stack(
+        children: [ 
+          Padding(
+            padding: EdgeInsets.only(top: size.height * 0.01),
+            child: DrawerButton(scaffoldKey: _scaffoldKey),
           ),
-          drawer: ClipRRect(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
-            child: Drawer(
-              backgroundColor: kMainColor,
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: size.height * 0.055, right: size.width * 0.6),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        /*visibilityKey.currentState!.setState(() {
-                          print("ciao");
-                        });*/
-                      }, 
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,) 
-                    ),
-                  )
-                  /*ListTile(
-                    title: const Text('Log Out'),
-                    onTap: () async {
-                      if(_currentUser.providerData[0].providerId.contains("google")) {
-                        await AuthenticationService.signOutFromGoogle();
-                      } else {
-                        await FirebaseAuth.instance.signOut();
-                      }
-          
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => LogInPage(),
-                        ),
-                      );
-                    },
-                  )*/
-                ],
-              )
-            ),
+          Padding(
+            padding: EdgeInsets.only(top: size.height * 0.01, left: size.width * 0.75),
+            child: const LocationButton(),
           ),
-        ),
-        SafeArea(
-          child: Row(
+          Padding(
+            padding: EdgeInsets.only(top: size.height * 0.875),
+            child: ScanButton(size: size),
+          ),
+        ]
+      ),
+      body: const MapboxComponent(token: token, style: style),
+      drawer: ClipRRect(
+        borderRadius: const BorderRadius.only(topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
+        child: Drawer(
+          backgroundColor: kMainColor,
+          child: ListView(
+            padding: EdgeInsets.zero,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
-                child: DrawerButton(scaffoldKey: _scaffoldKey, visibilityKey: visibilityKey)
+                padding: EdgeInsets.only(top: size.height * 0.05),
+                child: ListTile(
+                  leading: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      child: _currentUser.photoURL != null ? Image.network(_currentUser.photoURL!) : FlutterLogo()
+                    ),
+                  ),
+                  title: Text(
+                    _currentUser.displayName != null ? _currentUser.displayName! : _currentUser.email!,
+                    style: GoogleFonts.montserrat(
+                      textStyle: Theme.of(context).textTheme.headline4,
+                      fontSize: size.width * 0.05,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white
+                    )
+                  ),
+                ),
               ),
-              Padding(padding: EdgeInsets.only(left: size.width * 0.635)),
               Padding(
-                padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    final result = await acquireCurrentLocation();
-
-                    await globalController?.animateCamera(
-                      CameraUpdate.newLatLng(result),
-                    );
-                  },
-                  icon: const Icon(Icons.location_pin, color: kMainColor, size: 28),
-                  label: const Text(''),
-                  style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.fromLTRB(7.5, 10, 0, 10),
-                      primary: Colors.white),
+                padding: EdgeInsets.only(left: size.width * 0.025, top: size.height * 0.02),
+                child: Column(
+                  children: [
+                    ListTile(
+                      autofocus: true,
+                      focusColor: kSecondaryColor,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage(user: _currentUser,)),
+                        );
+                      },
+                      leading: Icon(Icons.map_rounded, color: Colors.white,),
+                      title: Text(
+                        "Map",
+                        style: GoogleFonts.montserrat(
+                          textStyle: Theme.of(context).textTheme.headline4,
+                          fontSize: size.width * 0.05,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                        )
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.settings_rounded, color: Colors.white,),
+                      title: Text(
+                        "Settings",
+                        style: GoogleFonts.montserrat(
+                          textStyle: Theme.of(context).textTheme.headline4,
+                          fontSize: size.width * 0.05,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                        )
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        if(_currentUser.providerData[0].providerId.contains("google")) {
+                          await AuthenticationService.signOutFromGoogle();
+                        } else {
+                          await FirebaseAuth.instance.signOut();
+                        }
+            
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => LogInPage(),
+                          ),
+                        );
+                      },
+                      leading: Icon(Icons.logout_rounded, color: Colors.white,),
+                      title: Text(
+                        "Log Out",
+                        style: GoogleFonts.montserrat(
+                          textStyle: Theme.of(context).textTheme.headline4,
+                          fontSize: size.width * 0.05,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white
+                        )
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           )
-        )   
-      ]
+        ),
+      ),
+    );
+  }
+}
+
+class ScanButton extends StatelessWidget {
+  const ScanButton({
+    Key? key,
+    required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CameraScreen()),
+        );
+      },
+      icon: Icon(Icons.camera_alt_rounded),
+      label: Text(
+        "SCAN A MONUMENT",
+        style: GoogleFonts.montserrat(
+          textStyle: Theme.of(context).textTheme.headline4,
+          fontSize: size.width * 0.037,
+          fontWeight: FontWeight.w600,
+          color: Colors.white
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.015, horizontal: size.width * 0.23),
+        primary: kSecondaryColor,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.elliptical(15, 15))),
+        
+      ),
+    );
+  }
+}
+
+class LocationButton extends StatelessWidget {
+  const LocationButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: () async {
+        final result = await acquireCurrentLocation();
+
+        await globalController?.animateCamera(
+          CameraUpdate.newLatLng(result),
+        );
+      },
+      icon: const Icon(Icons.location_pin, color: kMainColor, size: 28),
+      label: const Text(''),
+      style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          padding: const EdgeInsets.fromLTRB(7.5, 10, 0, 10),
+          primary: Colors.white),
     );
   }
 }
 
 class DrawerButton extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
-  final Key visibilityKey;
-  const DrawerButton({ Key? key, required this.scaffoldKey, required this.visibilityKey}) : super(key: key);
+  const DrawerButton({ Key? key, required this.scaffoldKey}) : super(key: key);
 
   @override
   State<DrawerButton> createState() => _DrawerButtonState();
@@ -161,28 +239,20 @@ class _DrawerButtonState extends State<DrawerButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      key: widget.visibilityKey,
-      visible: isDrawerButtonVisible,
-      maintainInteractivity: false,
-      maintainSize: true,
-      maintainState: true,
-      maintainAnimation: true,
-      child: ElevatedButton.icon(
-        onPressed: () {
-          setState(() {
-            isDrawerButtonVisible = !isDrawerButtonVisible;
-          });
-          widget.scaffoldKey.currentState?.openDrawer();
-        },
-        icon: const Icon(Icons.more_horiz_rounded,
-            color: kMainColor, size: 28),
-        label: const Text(''),
-        style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.fromLTRB(7.5, 10, 0, 10),
-            primary: Colors.white),
-      ),
+    return ElevatedButton.icon(
+      onPressed: () {
+        /*setState(() {
+          isDrawerButtonVisible = !isDrawerButtonVisible;
+        });*/
+        widget.scaffoldKey.currentState?.openDrawer();
+      },
+      icon: const Icon(Icons.more_horiz_rounded,
+          color: kMainColor, size: 28),
+      label: const Text(''),
+      style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          padding: const EdgeInsets.fromLTRB(7.5, 10, 0, 10),
+          primary: Colors.white),
     );
   }
 }

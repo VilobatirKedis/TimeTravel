@@ -41,124 +41,131 @@ class _HomePageState extends State<HomePage> {
     setStatusBarColor(Colors.transparent);
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    final visibilityKey = GlobalKey();
 
     return Scaffold(
       key: _scaffoldKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      floatingActionButton: Stack(
-        children: [ 
-          Padding(
-            padding: EdgeInsets.only(top: size.height * 0.01),
-            child: DrawerButton(scaffoldKey: _scaffoldKey),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: size.height * 0.01, left: size.width * 0.75),
-            child: const LocationButton(),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: size.height * 0.875),
-            child: ScanButton(size: size),
-          ),
-        ]
-      ),
+      floatingActionButton: Stack(children: [
+        Padding(
+          padding: EdgeInsets.only(top: size.height * 0.01),
+          child: DrawerButton(scaffoldKey: _scaffoldKey),
+        ),
+        Padding(
+          padding:
+              EdgeInsets.only(top: size.height * 0.01, left: size.width * 0.75),
+          child: const LocationButton(),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: size.height * 0.875),
+          child: ScanButton(size: size),
+        ),
+      ]),
       body: const MapboxComponent(token: token, style: style),
       drawer: ClipRRect(
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
+        borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
         child: Drawer(
-          backgroundColor: kMainColor,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.05),
-                child: ListTile(
-                  leading: SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                      child: _currentUser.photoURL != null ? Image.network(_currentUser.photoURL!) : FlutterLogo()
+            backgroundColor: kMainColor,
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: size.height * 0.05),
+                  child: ListTile(
+                    leading: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          child: _currentUser.photoURL != null
+                              ? Image.network(_currentUser.photoURL!)
+                              : FlutterLogo()),
                     ),
-                  ),
-                  title: Text(
-                    _currentUser.displayName != null ? _currentUser.displayName! : _currentUser.email!,
-                    style: GoogleFonts.montserrat(
-                      textStyle: Theme.of(context).textTheme.headline4,
-                      fontSize: size.width * 0.05,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white
-                    )
+                    title: Text(
+                        _currentUser.displayName != null
+                            ? _currentUser.displayName!
+                            : _currentUser.email!,
+                        style: GoogleFonts.montserrat(
+                            textStyle: Theme.of(context).textTheme.headline4,
+                            fontSize: size.width * 0.05,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: size.width * 0.025, top: size.height * 0.02),
-                child: Column(
-                  children: [
-                    ListTile(
-                      autofocus: true,
-                      focusColor: kSecondaryColor,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage(user: _currentUser,)),
-                        );
-                      },
-                      leading: Icon(Icons.map_rounded, color: Colors.white,),
-                      title: Text(
-                        "Map",
-                        style: GoogleFonts.montserrat(
-                          textStyle: Theme.of(context).textTheme.headline4,
-                          fontSize: size.width * 0.05,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
-                        )
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: size.width * 0.025, top: size.height * 0.02),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        autofocus: true,
+                        focusColor: kSecondaryColor,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                      user: _currentUser,
+                                    )),
+                          );
+                        },
+                        leading: Icon(
+                          Icons.map_rounded,
+                          color: Colors.white,
+                        ),
+                        title: Text("Map",
+                            style: GoogleFonts.montserrat(
+                                textStyle:
+                                    Theme.of(context).textTheme.headline4,
+                                fontSize: size.width * 0.05,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white)),
                       ),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.settings_rounded, color: Colors.white,),
-                      title: Text(
-                        "Settings",
-                        style: GoogleFonts.montserrat(
-                          textStyle: Theme.of(context).textTheme.headline4,
-                          fontSize: size.width * 0.05,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
-                        )
+                      ListTile(
+                        leading: Icon(
+                          Icons.settings_rounded,
+                          color: Colors.white,
+                        ),
+                        title: Text("Settings",
+                            style: GoogleFonts.montserrat(
+                                textStyle:
+                                    Theme.of(context).textTheme.headline4,
+                                fontSize: size.width * 0.05,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white)),
                       ),
-                    ),
-                    ListTile(
-                      onTap: () async {
-                        if(_currentUser.providerData[0].providerId.contains("google")) {
-                          await AuthenticationService.signOutFromGoogle();
-                        } else {
-                          await FirebaseAuth.instance.signOut();
-                        }
-            
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => LogInPage(),
-                          ),
-                        );
-                      },
-                      leading: Icon(Icons.logout_rounded, color: Colors.white,),
-                      title: Text(
-                        "Log Out",
-                        style: GoogleFonts.montserrat(
-                          textStyle: Theme.of(context).textTheme.headline4,
-                          fontSize: size.width * 0.05,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
-                        )
+                      ListTile(
+                        onTap: () async {
+                          if (_currentUser.providerData[0].providerId
+                              .contains("google")) {
+                            await AuthenticationService.signOutFromGoogle();
+                          } else {
+                            await FirebaseAuth.instance.signOut();
+                          }
+
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => LogInPage(),
+                            ),
+                          );
+                        },
+                        leading: Icon(
+                          Icons.logout_rounded,
+                          color: Colors.white,
+                        ),
+                        title: Text("Log Out",
+                            style: GoogleFonts.montserrat(
+                                textStyle:
+                                    Theme.of(context).textTheme.headline4,
+                                fontSize: size.width * 0.05,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white)),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          )
-        ),
+              ],
+            )),
       ),
     );
   }
@@ -185,18 +192,17 @@ class ScanButton extends StatelessWidget {
       label: Text(
         "SCAN A MONUMENT",
         style: GoogleFonts.montserrat(
-          textStyle: Theme.of(context).textTheme.headline4,
-          fontSize: size.width * 0.037,
-          fontWeight: FontWeight.w600,
-          color: Colors.white
-        ),
+            textStyle: Theme.of(context).textTheme.headline4,
+            fontSize: size.width * 0.037,
+            fontWeight: FontWeight.w600,
+            color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.015, horizontal: size.width * 0.23),
+        padding: EdgeInsets.symmetric(
+            vertical: size.height * 0.015, horizontal: size.width * 0.23),
         primary: kSecondaryColor,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.elliptical(15, 15))),
-        
       ),
     );
   }
@@ -216,6 +222,15 @@ class LocationButton extends StatelessWidget {
         await globalController?.animateCamera(
           CameraUpdate.newLatLng(result),
         );
+
+        await globalController?.addSymbol(
+          SymbolOptions(
+            geometry: const LatLng(44.7001734, 10.6277128),
+            textField: "Musei Civici",
+            textColor: "white",
+            iconImage: "assets/images/museicivici.jpg"
+          )
+        );
       },
       icon: const Icon(Icons.location_pin, color: kMainColor, size: 28),
       label: const Text(''),
@@ -229,25 +244,20 @@ class LocationButton extends StatelessWidget {
 
 class DrawerButton extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
-  const DrawerButton({ Key? key, required this.scaffoldKey}) : super(key: key);
+  const DrawerButton({Key? key, required this.scaffoldKey}) : super(key: key);
 
   @override
   State<DrawerButton> createState() => _DrawerButtonState();
 }
 
 class _DrawerButtonState extends State<DrawerButton> {
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        /*setState(() {
-          isDrawerButtonVisible = !isDrawerButtonVisible;
-        });*/
         widget.scaffoldKey.currentState?.openDrawer();
       },
-      icon: const Icon(Icons.more_horiz_rounded,
-          color: kMainColor, size: 28),
+      icon: const Icon(Icons.more_horiz_rounded, color: kMainColor, size: 28),
       label: const Text(''),
       style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
@@ -275,26 +285,27 @@ class _MapboxComponentState extends State<MapboxComponent> {
   @override
   Widget build(BuildContext context) {
     return MapboxMap(
-        accessToken: widget.token,
-        styleString: widget.style,
-        attributionButtonMargins: const Point(-30, -30),
-        logoViewMargins: const Point(-30, -30),
-        compassViewMargins: const Point(-30, -30),
-        trackCameraPosition: true,
-        myLocationEnabled: true,
-        myLocationRenderMode: MyLocationRenderMode.COMPASS,
-        myLocationTrackingMode: MyLocationTrackingMode.TrackingCompass,
-        initialCameraPosition: const CameraPosition(
-          zoom: 15.0,
-          target: LatLng(14.508, 46.048),
-        ),
-        onMapCreated: (MapboxMapController controller) async {
-          globalController = controller;
-          final result = await acquireCurrentLocation();
+      accessToken: widget.token,
+      styleString: widget.style,
+      attributionButtonMargins: const Point(-30, -30),
+      logoViewMargins: const Point(-30, -30),
+      compassViewMargins: const Point(-30, -30),
+      trackCameraPosition: true,
+      myLocationEnabled: true,
+      myLocationRenderMode: MyLocationRenderMode.COMPASS,
+      myLocationTrackingMode: MyLocationTrackingMode.TrackingCompass,
+      initialCameraPosition: const CameraPosition(
+        zoom: 15.0,
+        target: LatLng(14.508, 46.048),
+      ),
+      onMapCreated: (MapboxMapController controller) async {
+        globalController = controller;
+        final result = await acquireCurrentLocation();
 
-          await controller.animateCamera(
-            CameraUpdate.newLatLng(result),
-          );
-        });
+        await controller.animateCamera(
+          CameraUpdate.newLatLng(result),
+        );
+      }
+    );
   }
 }

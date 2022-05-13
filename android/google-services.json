@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "2508594105-63vq1bm5a7jqde0nvlo52fp8unju2prl.apps.googleusercontent.com",
+          "client_id": "2508594105-k8ud7hr0dumi75ni6a0mj1qtptuvpki3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.kedislugini.timetravel",
-            "certificate_hash": "08f0beb9ccfc262c8febbec1ab50283797c1bc43"
+            "certificate_hash": "a34c8a9db7881ef1d0ce403d18ed1900d39aa207"
           }
         },
         {

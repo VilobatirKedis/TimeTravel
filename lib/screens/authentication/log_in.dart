@@ -42,16 +42,15 @@ class _LogInPageState extends State<LogInPage> {
 
   @override
   Widget build(BuildContext context) {
-    //final firebaseUser = context.watch<User?>();
     Size size = MediaQuery.of(context).size;
 
     return FutureBuilder(
-      future: _initializeFirebase(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          setStatusBarColor(kMainColor);
-          return SafeArea(
-            child: Scaffold(
+        future: _initializeFirebase(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            setStatusBarColor(kMainColor);
+            return SafeArea(
+                child: Scaffold(
               backgroundColor: kMainColor,
               body: SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -124,18 +123,21 @@ class _LogInPageState extends State<LogInPage> {
                           if (_formKey.currentState!.validate()) {
                             User? user;
                             try {
-                              user = await AuthenticationService.signInUsingEmailPassword(
+                              user = await AuthenticationService
+                                  .signInUsingEmailPassword(
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim(),
                               );
                             } catch (e) {
-                              credentialsErrorDialog(context, "Check your credentials and try again", size);
+                              credentialsErrorDialog(context,
+                                  "Check your credentials and try again", size);
                             }
 
                             if (user != null) {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage(user: user!)),
+                                    builder: (context) =>
+                                        HomePage(user: user!)),
                               );
                             }
                           }
@@ -188,12 +190,10 @@ class _LogInPageState extends State<LogInPage> {
                   ],
                 ),
               ),
-            )
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
-      }
-    );
+            ));
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 }
 
@@ -205,24 +205,20 @@ Future<void> credentialsErrorDialog(context, message, size) async {
             title: const Text('Error'),
             content: SingleChildScrollView(
               child: ListBody(
-                children: <Widget>[
-                  Text(message)
-                ],
+                children: <Widget>[Text(message)],
               ),
             ),
             backgroundColor: kMainColor,
             titleTextStyle: GoogleFonts.montserrat(
-              textStyle: Theme.of(context).textTheme.headline4,
-              fontSize: size.width * 0.04,
-              fontWeight: FontWeight.w700,
-              color: Colors.white
-            ),
+                textStyle: Theme.of(context).textTheme.headline4,
+                fontSize: size.width * 0.04,
+                fontWeight: FontWeight.w700,
+                color: Colors.white),
             contentTextStyle: GoogleFonts.montserrat(
-              textStyle: Theme.of(context).textTheme.headline4,
-              fontSize: size.width * 0.04,
-              fontWeight: FontWeight.w200,
-              color: Colors.white
-            ),
+                textStyle: Theme.of(context).textTheme.headline4,
+                fontSize: size.width * 0.04,
+                fontWeight: FontWeight.w200,
+                color: Colors.white),
           ));
 }
 
@@ -311,16 +307,13 @@ class ThirdPartyLoginButton extends StatelessWidget {
         if (service == "Google") {
           try {
             await AuthenticationService.signInWithGoogle().then((user) => {
-              if(user != null) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(user: user)
-                  )
-                )
+              if (user != null) {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => HomePage(user: user)))
               }
-            
             });
           } catch (e) {
+            print(e);
             credentialsErrorDialog(context, "Error with Google log in.", size);
           }
         }

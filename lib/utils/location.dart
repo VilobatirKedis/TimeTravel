@@ -1,7 +1,8 @@
 import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:latlong2/latlong.dart' as latLng;
 
-Future<LatLng> acquireCurrentLocation() async {
+Future<latLng.LatLng> acquireCurrentLocation() async {
   Location location = Location();
 
   bool serviceEnabled;
@@ -13,7 +14,7 @@ Future<LatLng> acquireCurrentLocation() async {
   if (!serviceEnabled) {
     serviceEnabled = await location.requestService();
     if (!serviceEnabled) {
-      return const LatLng(0, 0);
+      return latLng.LatLng(0, 0);
     }
   }
 
@@ -21,10 +22,10 @@ Future<LatLng> acquireCurrentLocation() async {
   if (permissionGranted == PermissionStatus.denied) {
     permissionGranted = await location.requestPermission();
     if (permissionGranted != PermissionStatus.granted) {
-      return const LatLng(0, 0 );
+      return latLng.LatLng(0, 0 );
     }
   }
 
   final locationData = await location.getLocation();
-  return LatLng(locationData.latitude!, locationData.longitude!);
+  return latLng.LatLng(locationData.latitude!, locationData.longitude!);
 }

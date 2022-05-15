@@ -1,5 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart' as latLng;
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +14,68 @@ import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/utils/location.dart';
 import 'package:time_travel/screens/camera/main.dart';
 
-MapboxMapController? globalController = null;
+
+final _pageController = PageController();
+final Image markerImage = Image.asset(
+  "assets/images/marker.png",
+  scale: 30,
+);
+
+class MapMarker {
+  const MapMarker({
+    required this.location,
+    required this.image,
+    required this.title
+  });
+
+  final location;
+  final image;
+  final title;
+}
+
+List<MapMarker> dataMarker = [
+  MapMarker(location: latLng.LatLng(44.6977207, 10.6308046), image: Image.asset("assets/images/museicivici.jpg"), title: "Teatro Municipale"),
+  MapMarker(location: latLng.LatLng(44.7008133, 10.6312801), image: Image.asset("assets/images/museicivici.jpg"), title: "Cattedrale di Santa Maria Assunta")
+];
+
+List<Marker> locationMarker = [
+  Marker(
+    width: 80,
+    height: 80,
+    point: dataMarker[0].location,
+    builder: (context) => 
+    GestureDetector(
+      
+      onTap: () {
+        print("ciao");
+        _pageController.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
+      },
+      child: Container(
+        height: 40,
+        width: 40,
+        child: markerImage
+      ),
+    )
+  ),
+  Marker(
+    width: 80,
+    height: 80,
+    point: dataMarker[1].location,
+    builder: (_) => 
+    GestureDetector(
+      
+      onTap: () {
+        print("bella");
+        _pageController.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
+      },
+      child: Container(
+        height: 40,
+        width: 40,
+        child: markerImage
+      ),
+    )
+  ),
+];
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -32,9 +96,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const String token =
-        'sk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFyN2cyMzA2N2wzam5yejQ4eWo5ZTgifQ.jNioMcy0j9nicWrxUQqnRQ';
-    const String style = 'mapbox://styles/vilokedis/cl33c587m001914mk8eywqyia';
+    const String token = 'sk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFyN2cyMzA2N2wzam5yejQ4eWo5ZTgifQ.jNioMcy0j9nicWrxUQqnRQ';
+    const String publicToken = 'pk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFxNjV2MDA3d2szZXJ1dXBqb2Y4d3kifQ.we7gt1JJFXtMBG9d4mx7TA';
+    
+    const String style = 'mapbox://styles/vilokedis/cl37lp0ft000114p1ps7c8uvk';
+    const String fullPathStyle = 'https://api.mapbox.com/styles/v1/vilokedis/cl37lp0ft000114p1ps7c8uvk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFxNjV2MDA3d2szZXJ1dXBqb2Y4d3kifQ.we7gt1JJFXtMBG9d4mx7TA';
     final userToken = _currentUser.getIdToken();
 
     Size size = MediaQuery.of(context).size;
@@ -60,7 +126,25 @@ class _HomePageState extends State<HomePage> {
           child: ScanButton(size: size),
         ),
       ]),
-      body: const MapboxComponent(token: token, style: style),
+      body: /*Stack(
+        children: [*/
+          const MapComponent(token: publicToken, style: fullPathStyle),
+          /*Positioned(
+            left: 20,
+            right: 20,
+            bottom: 80,
+            height: size.height * 0.1,
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: dataMarker.length,
+              itemBuilder: (context, index) {
+                final item = dataMarker[index];
+                return MapItemCard(mapMarker: item);
+              },
+            ),
+          )
+        ],
+      ),*/
       drawer: ClipRRect(
         borderRadius: const BorderRadius.only(
             topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
@@ -171,6 +255,36 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class MapItemCard extends StatelessWidget {
+  const MapItemCard({ Key? key, required this.mapMarker }) : super(key: key);
+
+  final MapMarker mapMarker;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: kMainColor,
+      child: Row(
+        children: [
+          Expanded(
+            child: mapMarker.image
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  mapMarker.title
+                )
+              ],
+            )
+          )
+        ]
+      ),
+    );
+  }
+}
+
 class ScanButton extends StatelessWidget {
   const ScanButton({
     Key? key,
@@ -193,13 +307,13 @@ class ScanButton extends StatelessWidget {
         "SCAN A MONUMENT",
         style: GoogleFonts.montserrat(
             textStyle: Theme.of(context).textTheme.headline4,
-            fontSize: size.width * 0.037,
+            fontSize: size.width * 0.035,
             fontWeight: FontWeight.w600,
             color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.symmetric(
-            vertical: size.height * 0.015, horizontal: size.width * 0.23),
+            vertical: size.height * 0.015, horizontal: size.width * 0.24),
         primary: kSecondaryColor,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.elliptical(15, 15))),
@@ -219,18 +333,9 @@ class LocationButton extends StatelessWidget {
       onPressed: () async {
         final result = await acquireCurrentLocation();
 
-        await globalController?.animateCamera(
+        /*await globalController?.animateCamera(
           CameraUpdate.newLatLng(result),
-        );
-
-        await globalController?.addSymbol(
-          SymbolOptions(
-            geometry: const LatLng(44.7001734, 10.6277128),
-            textField: "Musei Civici",
-            textColor: "white",
-            iconImage: "assets/images/museicivici.jpg"
-          )
-        );
+        );*/
       },
       icon: const Icon(Icons.location_pin, color: kMainColor, size: 28),
       label: const Text(''),
@@ -267,7 +372,7 @@ class _DrawerButtonState extends State<DrawerButton> {
   }
 }
 
-class MapboxComponent extends StatefulWidget {
+/*class MapboxComponent extends StatefulWidget {
   const MapboxComponent({
     Key? key,
     required this.token,
@@ -300,10 +405,79 @@ class _MapboxComponentState extends State<MapboxComponent> {
       ),
       onMapCreated: (MapboxMapController controller) async {
         globalController = controller;
+
+        controller.addSymbols(localita);
+
         final result = await acquireCurrentLocation();
 
         await controller.animateCamera(
           CameraUpdate.newLatLng(result),
+        );
+      }
+    );
+  }
+}*/
+
+class MapComponent extends StatefulWidget {
+  const MapComponent({ Key? key,
+    required this.token,
+    required this.style, }) : super(key: key);
+
+  final String token;
+  final String style;
+
+  @override
+  State<MapComponent> createState() => _MapComponentState();
+}
+
+class _MapComponentState extends State<MapComponent> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<latLng.LatLng>(
+      future: acquireCurrentLocation(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData) {
+          return FlutterMap(
+            children: [
+              TileLayerWidget(
+                options: TileLayerOptions(
+                  urlTemplate: widget.style,
+                  additionalOptions:  {
+                    "accessToken": widget.token,
+                  }
+                ),
+              ),
+              MarkerLayerWidget(
+                options: MarkerLayerOptions(
+                  markers: locationMarker
+                ),
+              ),
+              LocationMarkerLayerWidget(
+                options: LocationMarkerLayerOptions(
+                  marker: const DefaultLocationMarker(
+                    color: kSecondaryColor,
+                  ),
+                  markerSize: const Size(20, 20),
+                  accuracyCircleColor: kSecondaryColor.withOpacity(0.1),
+                  headingSectorColor: kSecondaryColor.withOpacity(0.8),
+                  headingSectorRadius: 50,
+                  markerAnimationDuration: Duration.zero,
+                ),
+                
+              )
+            ],
+            options: MapOptions(
+              center: snapshot.data,
+              rotationThreshold: 1000
+            ),
+          );
+        }
+
+        return const Center(
+          child: CircularProgressIndicator(
+            color: kSecondaryColor,
+            backgroundColor: kMainColor,
+          ),
         );
       }
     );

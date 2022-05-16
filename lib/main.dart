@@ -1,13 +1,9 @@
 import 'package:camera/camera.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
-import 'package:provider/provider.dart';
-import 'package:time_travel/screens/authentication/authentication_wrapper.dart';
-import 'package:time_travel/screens/authentication/log_in.dart';
-import 'package:time_travel/utils/auth_service.dart';
+
+import 'package:time_travel/screens/authentication/logIn.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -27,9 +23,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LogInPage(),
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: LogInPage(),
+        );
+      }
     );
   }
 }

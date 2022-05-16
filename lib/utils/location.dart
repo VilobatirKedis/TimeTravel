@@ -1,5 +1,4 @@
 import 'package:location/location.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 
 Future<latLng.LatLng> acquireCurrentLocation() async {

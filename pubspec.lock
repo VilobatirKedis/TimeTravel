@@ -394,34 +394,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
-  mapbox_gl:
-    dependency: "direct main"
-    description:
-      name: mapbox_gl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.14.0"
-  mapbox_gl_dart:
-    dependency: transitive
-    description:
-      name: mapbox_gl_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
-  mapbox_gl_platform_interface:
-    dependency: transitive
-    description:
-      name: mapbox_gl_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.14.0"
-  mapbox_gl_web:
-    dependency: transitive
-    description:
-      name: mapbox_gl_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.14.0"
   matcher:
     dependency: transitive
     description:
@@ -569,6 +541,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1+1"
+  sizer:
+    dependency: "direct main"
+    description:
+      name: sizer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.15"
   sky_engine:
     dependency: transitive
     description: flutter

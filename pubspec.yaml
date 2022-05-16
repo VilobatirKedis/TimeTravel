@@ -43,12 +43,12 @@ dependencies:
   path_provider: ^2.0.9
   path: ^1.8.0
   location: ^4.3.0
-  mapbox_gl: ^0.14.0
   flutter_statusbarcolor_ns: ^0.4.0
   google_fonts: ^2.3.2
   google_sign_in: ^5.3.1
   flutter_map: ^0.14.0
   flutter_map_location_marker: ^3.1.0
+  sizer: ^2.0.15
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:time_travel/screens/camera/photoPreview.dart';
 import 'package:time_travel/utils/constants.dart';
+import 'package:sizer/sizer.dart';
+
 
 import '../../main.dart';
 
@@ -113,39 +115,32 @@ class _CameraScreenState extends State<CameraScreen>
       backgroundColor: kMainColor,
       body: _isCameraInitialized
           ? AspectRatio(
-              aspectRatio: 0.9 / controller!.value.aspectRatio,
+              aspectRatio: 1 / controller!.value.aspectRatio,
               child: controller!.buildPreview(),
             )
           : Container(),
-      floatingActionButton: Stack(
-        children: [
-          Center(
-            heightFactor: 0.9,
-            widthFactor: 4.5,
-            child: InkWell(
-              onTap: () async {
-                XFile? rawImage = await takePicture();
-                File imageFile = File(rawImage!.path);
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: InkWell(
+        onTap: () async {
+          XFile? rawImage = await takePicture();
+          File imageFile = File(rawImage!.path);
 
 
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PhotoPreview(
-                      imagePath: rawImage.path,
-                    ),
-                  ),
-                );
-              },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(Icons.circle, color: kSecondaryColor.withOpacity(0.5), size: 80),
-                  Icon(Icons.circle, color: kSecondaryColor, size: 65),
-                ],
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PhotoPreview(
+                imagePath: rawImage.path,
               ),
             ),
-          )
-        ],
+          );
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(Icons.circle, color: kSecondaryColor.withOpacity(0.5), size: 80),
+            Icon(Icons.circle, color: kSecondaryColor, size: 65),
+          ],
+        ),
       ),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
-import 'package:time_travel/screens/authentication/sign_up.dart';
+import 'package:time_travel/screens/authentication/signUp.dart';
 import 'package:time_travel/utils/constants.dart';
 
-import '../authentication/log_in.dart';
+import '../authentication/logIn.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);

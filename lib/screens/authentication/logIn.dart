@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
-import 'package:time_travel/utils/auth_service.dart';
-import 'package:time_travel/utils/form_validator.dart';
+import 'package:time_travel/utils/authService.dart';
+import 'package:time_travel/utils/formValidator.dart';
 import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/screens/home_page/main.dart';
 
@@ -53,44 +52,43 @@ class _LogInPageState extends State<LogInPage> {
                 child: Scaffold(
               backgroundColor: kMainColor,
               body: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Center(
                       child: Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.12),
+                        padding: EdgeInsets.only(top: 10.h),
                         child: Text(
                           "Log In.",
                           style: GoogleFonts.montserrat(
                               textStyle: Theme.of(context).textTheme.headline4,
-                              fontSize: size.width * 0.1,
+                              fontSize: 30.sp,
                               fontWeight: FontWeight.w700,
                               color: Colors.white),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.05),
+                      padding: EdgeInsets.only(top: 5.h),
                       child: SizedBox(
-                          width: size.width * 0.95,
+                          width: 95.w,
                           child: ThirdPartyLoginButton(
                               size: size, service: "Google")),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.02),
+                      padding: EdgeInsets.only(top: 2.h),
                       child: SizedBox(
-                          width: size.width * 0.95,
+                          width: 95.w,
                           child: ThirdPartyLoginButton(
                               size: size, service: "Facebook")),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.04),
+                      padding: EdgeInsets.only(top: 4.h),
                       child: Text(
                         "Or",
                         style: GoogleFonts.montserrat(
                             textStyle: Theme.of(context).textTheme.headline4,
-                            fontSize: size.width * 0.05,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w200,
                             color: Colors.white),
                       ),
@@ -99,7 +97,7 @@ class _LogInPageState extends State<LogInPage> {
                       key: _formKey,
                       child: Column(children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.05),
+                          padding: EdgeInsets.only(top: 5.h),
                           child: GeneralTextField(
                               size: size,
                               controller: emailController,
@@ -117,7 +115,7 @@ class _LogInPageState extends State<LogInPage> {
                       ]),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.2),
+                      padding: EdgeInsets.only(top: 7.h),
                       child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
@@ -146,14 +144,14 @@ class _LogInPageState extends State<LogInPage> {
                           "Log In",
                           style: GoogleFonts.montserrat(
                               textStyle: Theme.of(context).textTheme.headline4,
-                              fontSize: size.width * 0.04,
+                              fontSize: 10.sp,
                               fontWeight: FontWeight.w700,
                               color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(
-                              horizontal: size.width * 0.40,
-                              vertical: size.height * 0.016),
+                              horizontal: 40.w,
+                              vertical: 2.h),
                           primary: kSecondaryColor,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
@@ -168,7 +166,7 @@ class _LogInPageState extends State<LogInPage> {
                           "Don't have an account?",
                           style: GoogleFonts.montserrat(
                               textStyle: Theme.of(context).textTheme.headline4,
-                              fontSize: size.width * 0.04,
+                              fontSize: 10.sp,
                               fontWeight: FontWeight.w200,
                               color: Colors.white),
                         ),
@@ -179,7 +177,7 @@ class _LogInPageState extends State<LogInPage> {
                             style: GoogleFonts.montserrat(
                                 textStyle:
                                     Theme.of(context).textTheme.headline4,
-                                fontSize: size.width * 0.04,
+                                fontSize: 10.sp,
                                 fontWeight: FontWeight.w600,
                                 color: kSecondaryColor),
                           ),

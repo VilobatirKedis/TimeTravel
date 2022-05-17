@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:time_travel/screens/authentication/signUp.dart';
 
 import 'package:time_travel/utils/authService.dart';
 import 'package:time_travel/utils/formValidator.dart';
@@ -127,8 +128,7 @@ class _LogInPageState extends State<LogInPage> {
                                 password: passwordController.text.trim(),
                               );
                             } catch (e) {
-                              credentialsErrorDialog(context,
-                                  "Check your credentials and try again", size);
+                              customDialog(context, "Check your credentials and try again", "Error");
                             }
 
                             if (user != null) {
@@ -171,7 +171,10 @@ class _LogInPageState extends State<LogInPage> {
                               color: Colors.white),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                              builder: (context) => SignUpPage()));
+                          },
                           child: Text(
                             "Sign Up",
                             style: GoogleFonts.montserrat(
@@ -193,31 +196,6 @@ class _LogInPageState extends State<LogInPage> {
           return const Center(child: CircularProgressIndicator());
         });
   }
-}
-
-Future<void> credentialsErrorDialog(context, message, size) async {
-  return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) => AlertDialog(
-            title: const Text('Error'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[Text(message)],
-              ),
-            ),
-            backgroundColor: kMainColor,
-            titleTextStyle: GoogleFonts.montserrat(
-                textStyle: Theme.of(context).textTheme.headline4,
-                fontSize: size.width * 0.04,
-                fontWeight: FontWeight.w700,
-                color: Colors.white),
-            contentTextStyle: GoogleFonts.montserrat(
-                textStyle: Theme.of(context).textTheme.headline4,
-                fontSize: size.width * 0.04,
-                fontWeight: FontWeight.w200,
-                color: Colors.white),
-          ));
 }
 
 class GeneralTextField extends StatelessWidget {
@@ -312,7 +290,7 @@ class ThirdPartyLoginButton extends StatelessWidget {
             });
           } catch (e) {
             print(e);
-            credentialsErrorDialog(context, "Error with Google log in.", size);
+            customDialog(context, "Error with Google log in", "Error");
           }
         }
       },

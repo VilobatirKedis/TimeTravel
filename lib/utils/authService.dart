@@ -6,7 +6,7 @@ class AuthenticationService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   static Future<User?> registerUsingEmailPassword({
-    required String name,
+    required String username,
     required String email,
     required String password,
   }) async {
@@ -18,7 +18,7 @@ class AuthenticationService {
         password: password,
       );
       user = userCredential.user;
-      await user!.updateDisplayName(name);
+      await user!.updateDisplayName(username);
       await user.reload();
       user = auth.currentUser;
     } on FirebaseAuthException catch (e) {

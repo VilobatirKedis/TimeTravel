@@ -58,20 +58,6 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           MapComponent(controller: pageController),
-          Positioned(
-            left: 20,
-            right: 20,
-            bottom: 80,
-            height: size.height * 0.1,
-            child: PageView.builder(
-              controller: pageController,
-              itemCount: dataMarker.length,
-              itemBuilder: (context, index) {
-                final item = dataMarker[index];
-                return MapItemCard(mapMarker: item);
-              },
-            ),
-          )
         ],
       ),
       drawer: ClipRRect(

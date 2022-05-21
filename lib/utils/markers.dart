@@ -3,7 +3,7 @@ import 'package:latlong2/latlong.dart' as latLng;
 
 final Image markerImage = Image.asset(
   "assets/images/marker.png",
-  scale: 3,
+  scale: 30,
 );
 
 class MapMarker {

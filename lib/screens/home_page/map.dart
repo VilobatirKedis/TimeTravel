@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart' as latLng;
+import 'package:sizer/sizer.dart';
 
 
 import 'package:time_travel/utils/constants.dart';
@@ -23,43 +24,50 @@ class _MapComponentState extends State<MapComponent> {
   final String fullPathStyle = 'https://api.mapbox.com/styles/v1/vilokedis/cl37lp0ft000114p1ps7c8uvk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFxNjV2MDA3d2szZXJ1dXBqb2Y4d3kifQ.we7gt1JJFXtMBG9d4mx7TA';
 
   static late PageController currentController;
+  List<Marker> locationMarker = [];
 
   @override
   void initState() {
     currentController = widget.controller;
+    for (var i = 0; i < dataMarker.length; i++) {
+      locationMarker.add(
+        Marker(
+          width: 80,
+          height: 80,
+          point: dataMarker[i].location, 
+          builder: (context) {
+            return GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  context: context, 
+                  builder: (context) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        color: kMainColor,
+                      ),
+                      child: Column(
+                        children: [
+                          dataMarker[i].image
+                        ],
+
+                      ),
+                    );
+                  }
+                );
+              },
+              child: markerImage
+            );
+          }
+        )
+      );
+    }
     super.initState();
   }
-
-  List<Marker> locationMarker = [
-    Marker(
-      width: 80,
-      height: 80,
-      point: dataMarker[0].location,
-      builder: (context) {
-        return TextButton(
-          onPressed: () {
-            print("ciao");
-            currentController.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
-          },
-          child: markerImage
-        );
-      }
-    ),
-    Marker(
-      width: 80,
-      height: 80,
-      point: dataMarker[1].location,
-      builder: (_) { 
-        return TextButton(
-          onPressed: () {
-            print("ciao");
-            currentController.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.bounceInOut);
-          },
-          child: Text("Ciao")
-        );
-      }
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -68,18 +76,18 @@ class _MapComponentState extends State<MapComponent> {
       builder: (context, snapshot) {
         if(snapshot.hasData) {
           return FlutterMap(
-            children: [
+            layers: [
+              MarkerLayerOptions(
+                markers: locationMarker
+              ),
+            ],
+            children: <Widget>[
               TileLayerWidget(
                 options: TileLayerOptions(
                   urlTemplate: fullPathStyle,
                   additionalOptions:  {
                     "accessToken": publicToken,
                   }
-                ),
-              ),
-              MarkerLayerWidget(
-                options: MarkerLayerOptions(
-                  markers: locationMarker
                 ),
               ),
               LocationMarkerLayerWidget(
@@ -98,7 +106,8 @@ class _MapComponentState extends State<MapComponent> {
             ],
             options: MapOptions(
               center: snapshot.data,
-              rotationThreshold: 1000
+              rotationThreshold: 50000,
+              zoom: 9
             ),
           );
         }
@@ -133,7 +142,10 @@ class MapItemCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  mapMarker.title
+                  mapMarker.title,
+                  style: TextStyle(
+                    color: Colors.white
+                  ),
                 )
               ],
             )

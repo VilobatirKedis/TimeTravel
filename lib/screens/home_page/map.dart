@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import 'package:sizer/sizer.dart';
 
@@ -32,8 +33,8 @@ class _MapComponentState extends State<MapComponent> {
     for (var i = 0; i < dataMarker.length; i++) {
       locationMarker.add(
         Marker(
-          width: 80,
-          height: 80,
+          width: 40,
+          height: 40,
           point: dataMarker[i].location, 
           builder: (context) {
             return GestureDetector(
@@ -52,7 +53,36 @@ class _MapComponentState extends State<MapComponent> {
                       ),
                       child: Column(
                         children: [
-                          dataMarker[i].image
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: SizedBox(
+                              width: 45.w,
+                              height: 0.5.h,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30.0),
+                              child: dataMarker[i].image,
+                            ),
+                          ),
+                          Text(
+                            dataMarker[i].title,
+                            style: GoogleFonts.montserrat(
+                              textStyle: Theme.of(context).textTheme.headline4,
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white
+                            )
+                          ),
+                          ExploreButton(),
                         ],
 
                       ),
@@ -107,7 +137,7 @@ class _MapComponentState extends State<MapComponent> {
             options: MapOptions(
               center: snapshot.data,
               rotationThreshold: 50000,
-              zoom: 9
+              zoom: 12.sp
             ),
           );
         }
@@ -119,6 +149,41 @@ class _MapComponentState extends State<MapComponent> {
           ),
         );
       }
+    );
+  }
+}
+
+class ExploreButton extends StatelessWidget {
+  const ExploreButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 3.h),
+      child: ElevatedButton(
+        onPressed: () async {
+          
+        },
+        child: Text(
+          "Scopri di piu'",
+          style: GoogleFonts.montserrat(
+              textStyle: Theme.of(context).textTheme.headline4,
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w700,
+              color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(
+              horizontal: 30.w,
+              vertical: 2.h),
+          primary: kSecondaryColor,
+          shape: const RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.all(Radius.elliptical(15, 15))),
+        ),
+      ),
     );
   }
 }

@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                   title: Text(
                     _currentUser.displayName != null
                         ? _currentUser.displayName!
-                        : _currentUser.email!,
+                        : _currentUser.displayName!,
                     style: GoogleFonts.montserrat(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 15.sp,

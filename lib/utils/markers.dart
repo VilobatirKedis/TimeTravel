@@ -19,6 +19,6 @@ class MapMarker {
 }
 
 List<MapMarker> dataMarker = [
-  MapMarker(location: latLng.LatLng(44.6977207, 10.6308046), image: Image.asset("assets/images/museicivici.jpg"), title: "Teatro Municipale"),
-  MapMarker(location: latLng.LatLng(44.7008133, 10.6312801), image: Image.asset("assets/images/museicivici.jpg"), title: "Cattedrale di Santa Maria Assunta")
+  MapMarker(location: latLng.LatLng(44.6977207, 10.6308046), image: Image.asset("assets/images/duomo.jpg"), title: "Duomo di Reggio Emilia" ),
+  MapMarker(location: latLng.LatLng(44.7008133, 10.6312801), image: Image.asset("assets/images/museicivici.jpg"), title: "Teatro Municipale")
 ];

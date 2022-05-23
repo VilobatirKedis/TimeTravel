@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import 'package:time_travel/screens/authentication/logIn.dart';
 import 'package:time_travel/screens/home_page/map.dart';
+import 'package:time_travel/screens/settings/main.dart';
 import 'package:time_travel/utils/authService.dart';
 import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/utils/location.dart';
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: ClipRRect(
         borderRadius: const BorderRadius.only(
-        topRight: Radius.circular(50), bottomRight: Radius.circular(50)),
+        topRight: Radius.circular(30), bottomRight: Radius.circular(30)),
         child: Drawer(
           backgroundColor: kMainColor,
           child: ListView(
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                   title: Text(
                     _currentUser.displayName != null
                         ? _currentUser.displayName!
-                        : _currentUser.displayName!,
+                        : _currentUser.email!,
                     style: GoogleFonts.montserrat(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 15.sp,
@@ -94,21 +95,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(
-                    left: 2.w, top: 2.h),
+                padding: EdgeInsets.only(left: 2.w, top: 2.h),
                 child: Column(
                   children: [
                     ListTile(
-                      autofocus: true,
-                      focusColor: kSecondaryColor,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius:  BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30),)
+                      ),
+                      selected: true,
+                      selectedTileColor: kSecondaryColor,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePage(
-                                    user: _currentUser,
-                                  )),
-                        );
+                        Navigator.pop(context);
                       },
                       leading: Icon(
                         Icons.map_rounded,
@@ -123,7 +120,14 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white)),
                     ),
                     ListTile(
-                      leading: Icon(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Settings()
+                          )
+                        );
+                      },
+                      leading: const Icon(
                         Icons.settings_rounded,
                         color: Colors.white,
                       ),

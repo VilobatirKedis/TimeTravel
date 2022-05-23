@@ -137,7 +137,7 @@ class _MapComponentState extends State<MapComponent> {
             options: MapOptions(
               center: snapshot.data,
               rotationThreshold: 50000,
-              zoom: 12.sp
+              zoom: 10.sp
             ),
           );
         }

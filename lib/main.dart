@@ -12,7 +12,7 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
     cameras = await availableCameras();
   } on CameraException catch (e) {
-    print('Error in fetching the cameras: $e');
+    throw('Error in fetching the cameras: $e');
   }
   await FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
   runApp(const MyApp());
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return MaterialApp(
+        return const MaterialApp(
           debugShowCheckedModeBanner: false,
           home: LogInPage(),
         );

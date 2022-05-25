@@ -3,14 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:time_travel/screens/authentication/signUp.dart';
 
+import 'package:time_travel/screens/authentication/signUp.dart';
 import 'package:time_travel/utils/authService.dart';
 import 'package:time_travel/utils/formValidator.dart';
 import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/screens/home_page/main.dart';
 
 class LogInPage extends StatefulWidget {
+  const LogInPage({Key? key,}) : super(key: key);
   @override
   State<LogInPage> createState() => _LogInPageState();
 }
@@ -22,6 +23,7 @@ class _LogInPageState extends State<LogInPage> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
+      setStatusBarColor(Colors.transparent);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => HomePage(
@@ -50,7 +52,7 @@ class _LogInPageState extends State<LogInPage> {
           if (snapshot.hasData) {
             setStatusBarColor(kMainColor);
             return SafeArea(
-                child: Scaffold(
+              child: Scaffold(
               backgroundColor: kMainColor,
               body: SingleChildScrollView(
                 child: Column(
@@ -84,7 +86,7 @@ class _LogInPageState extends State<LogInPage> {
                               size: size, service: "Facebook")),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 4.h),
+                      padding: EdgeInsets.only(top: 6.h),
                       child: Text(
                         "Or",
                         style: GoogleFonts.montserrat(
@@ -116,7 +118,7 @@ class _LogInPageState extends State<LogInPage> {
                       ]),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 7.h),
+                      padding: EdgeInsets.only(top: 12.h),
                       child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
@@ -128,7 +130,10 @@ class _LogInPageState extends State<LogInPage> {
                                 password: passwordController.text.trim(),
                               );
                             } catch (e) {
-                              customDialog(context, "Check your credentials and try again", "Error");
+                              customDialog(
+                                  context,
+                                  "Check your credentials and try again",
+                                  "Error");
                             }
 
                             if (user != null) {
@@ -150,8 +155,7 @@ class _LogInPageState extends State<LogInPage> {
                         ),
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 40.w,
-                              vertical: 2.h),
+                              horizontal: 40.w, vertical: 2.h),
                           primary: kSecondaryColor,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
@@ -172,8 +176,9 @@ class _LogInPageState extends State<LogInPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (context) => SignUpPage()));
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => SignUpPage()));
                           },
                           child: Text(
                             "Sign Up",
@@ -220,24 +225,22 @@ class GeneralTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      /*decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.2),
-            offset: Offset(0, 3),
-            blurRadius: 2,
-            spreadRadius: 2
-          )
-        ]
-      ),*/
       child: SizedBox(
         width: size.width * 0.95,
         child: TextFormField(
           validator: (value) {
             if (label == "Password") {
-              Validator.validatePassword(password: value!);
+              try {
+                Validator.validatePassword(password: value!);
+              } catch (e) {
+                customDialog(context, e.toString(), "Error with password");
+              }
             } else {
-              Validator.validateEmail(email: value!);
+              try {
+                Validator.validateEmail(email: value!);
+              } catch (e) {
+                customDialog(context, e.toString(), "Error with email");
+              }
             }
           },
           obscureText: label == "Password" ? true : false,
@@ -289,12 +292,13 @@ class ThirdPartyLoginButton extends StatelessWidget {
           try {
             await AuthenticationService.signInWithGoogle().then((user) => {
               if (user != null) {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => HomePage(user: user)))
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(user: user))
+                )
               }
             });
           } catch (e) {
-            print(e);
             customDialog(context, "Error with Google log in", "Error");
           }
         }

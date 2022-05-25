@@ -49,6 +49,7 @@ dependencies:
   flutter_map: ^0.14.0
   flutter_map_location_marker: ^3.1.0
   sizer: ^2.0.15
+  animations: ^2.0.2
 
 dev_dependencies:
   flutter_test:

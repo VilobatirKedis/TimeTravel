@@ -54,7 +54,7 @@ class _MapComponentState extends State<MapComponent> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.only(top: 2.h),
                             child: SizedBox(
                               width: 45.w,
                               height: 0.5.h,
@@ -73,14 +73,17 @@ class _MapComponentState extends State<MapComponent> {
                               child: dataMarker[i].image,
                             ),
                           ),
-                          Text(
-                            dataMarker[i].title,
-                            style: GoogleFonts.montserrat(
-                              textStyle: Theme.of(context).textTheme.headline4,
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white
-                            )
+                          Padding(
+                            padding: EdgeInsets.only(top: 2.h),
+                            child: Text(
+                              dataMarker[i].title,
+                              style: GoogleFonts.montserrat(
+                                textStyle: Theme.of(context).textTheme.headline4,
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white
+                              )
+                            ),
                           ),
                           ExploreButton(),
                         ],
@@ -161,7 +164,7 @@ class ExploreButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 3.h),
+      padding: EdgeInsets.only(top: 5.h),
       child: ElevatedButton(
         onPressed: () async {
           

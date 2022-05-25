@@ -48,12 +48,12 @@ class _HomePageState extends State<HomePage> {
         ),
         Padding(
           padding:
-              EdgeInsets.only(top: 1.h, left: 70.w),
+              EdgeInsets.only(top: 1.h, left: 75.w),
           child: const LocationButton(),
         ),
         Padding(
           padding: EdgeInsets.only(top: 87.h),
-          child: ScanButton(),
+          child: const ScanButton(),
         ),
       ]),
       body: Stack(
@@ -115,6 +115,25 @@ class _HomePageState extends State<HomePage> {
                           style: GoogleFonts.montserrat(
                               textStyle:
                                   Theme.of(context).textTheme.headline4,
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white)),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Settings()
+                          )
+                        );
+                      },
+                      leading: const Icon(
+                        Icons.person_rounded,
+                        color: Colors.white,
+                      ),
+                      title: Text("Profile",
+                          style: GoogleFonts.montserrat(
+                              textStyle: Theme.of(context).textTheme.headline4,
                               fontSize: 15.sp,
                               fontWeight: FontWeight.w500,
                               color: Colors.white)),
@@ -202,7 +221,7 @@ class ScanButton extends StatelessWidget {
       ),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.symmetric(
-            vertical: 1.5.h, horizontal: 18.w),
+            vertical: 1.5.h, horizontal: 24.5.w),
         primary: kSecondaryColor,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.elliptical(15, 15))),

@@ -6,7 +6,7 @@ class Validator {
       return null;
     }
     if (name.isEmpty) {
-      return 'Name can\'t be empty';
+      throw 'Name can\'t be empty';
     }
 
     return null;
@@ -20,9 +20,9 @@ class Validator {
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
     if (email.isEmpty) {
-      return 'Email can\'t be empty';
+      throw 'Email can\'t be empty';
     } else if (!emailRegExp.hasMatch(email)) {
-      return 'Enter a correct email';
+      throw 'Enter a correct email';
     }
 
     return null;
@@ -33,9 +33,9 @@ class Validator {
       return null;
     }
     if (password.isEmpty) {
-      return 'Password can\'t be empty';
+      throw 'Password can\'t be empty';
     } else if (password.length < 6) {
-      return 'Enter a password with length at least 6';
+      throw 'Enter a password with length at least 6';
     }
 
     return null;

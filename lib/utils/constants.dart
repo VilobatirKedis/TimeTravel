@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,4 +36,16 @@ Future<void> customDialog(context, message, title) async {
           color: Colors.white),
     )
   );
+}
+
+class CustomContainer extends StatelessWidget {
+  const CustomContainer({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return OpenContainer(
+      closedBuilder: (BuildContext context, void Function() action) { return Container();  }, 
+      openBuilder: (BuildContext context, void Function({Object? returnValue}) action) { return Container();  },    
+    );
+  }
 }

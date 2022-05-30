@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
+import 'package:animations/animations.dart';
 
 import 'package:time_travel/screens/authentication/logIn.dart';
 import 'package:time_travel/screens/home_page/map.dart';
@@ -53,7 +54,21 @@ class _HomePageState extends State<HomePage> {
         ),
         Padding(
           padding: EdgeInsets.only(top: 87.h),
-          child: const ScanButton(),
+          child: OpenContainer(
+            transitionDuration: Duration(milliseconds: 600),
+            
+            closedBuilder: (BuildContext context, void Function() openContainer) {  
+              return ScanButton(widgetIn: openContainer);
+            }, 
+            closedElevation: 0,
+            closedColor: Colors.transparent,
+
+            openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {  
+              return CameraScreen();
+            },
+            openColor: Colors.transparent,
+            openElevation: 0,
+          )
         ),
       ]),
       body: Stack(
@@ -93,6 +108,11 @@ class _HomePageState extends State<HomePage> {
                     )
                   ),
                 ),
+              ),
+              Divider(
+                thickness: 3,
+                indent: 15,
+                endIndent: 15,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 2.w, top: 2.h),
@@ -197,18 +217,17 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ScanButton extends StatelessWidget {
+  final void Function() widgetIn;
+
   const ScanButton({
-    Key? key
+    Key? key, required this.widgetIn
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CameraScreen()),
-        );
+        widgetIn();
       },
       icon: Icon(Icons.camera_alt_rounded),
       label: Text(

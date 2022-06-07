@@ -9,25 +9,63 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: kMainColor,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 5.h, left: 5.w),
-              child: Text(
-                "Settings.",
-                style: GoogleFonts.montserrat(
-                  textStyle: Theme.of(context).textTheme.headline4,
-                  fontSize: 30.sp,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white
+    return Material(
+      child: Container(
+        color: kMainColor,
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 3.h, left: 3.w),
+                child: Row(
+                  children: [
+                    Material(
+                      color: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      surfaceTintColor: Colors.transparent,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }, 
+                        icon: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: Colors.white,
+                          size: 30
+                        )
+                      ),
+                    ),
+    
+                    Padding(
+                      padding: EdgeInsets.only(left: 8.w),
+                      child: Text(
+                        "Settings.",
+                        style: GoogleFonts.montserrat(
+                          textStyle: Theme.of(context).textTheme.headline4,
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: ListView(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        
+                      },
+                      title: Text("Language"),
+                      trailing: Icon(Icons.arrow_drop_down_rounded),
+                    )
+                  ],
+                )
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -134,6 +134,9 @@ class _MapComponentState extends State<MapComponent> {
             children: <Widget>[
               TileLayerWidget(
                 options: TileLayerOptions(
+                  keepBuffer: 20,
+                  tileProvider: NetworkTileProvider(),
+                  updateInterval: 100,
                   urlTemplate: fullPathStyle,
                   additionalOptions:  {
                     "accessToken": publicToken,

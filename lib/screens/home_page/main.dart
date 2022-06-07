@@ -6,6 +6,7 @@ import 'package:animations/animations.dart';
 
 import 'package:time_travel/screens/authentication/logIn.dart';
 import 'package:time_travel/screens/home_page/map.dart';
+import 'package:time_travel/screens/profile/main.dart';
 import 'package:time_travel/screens/settings/main.dart';
 import 'package:time_travel/utils/authService.dart';
 import 'package:time_travel/utils/constants.dart';
@@ -94,12 +95,13 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.all(Radius.circular(50)),
                         child: _currentUser.photoURL != null
                             ? Image.network(_currentUser.photoURL!)
-                            : FlutterLogo()),
+                            : Image.asset("assets/images/defaultuser.jpg")
+                    ),
                   ),
                   title: Text(
                     _currentUser.displayName != null
                         ? _currentUser.displayName!
-                        : _currentUser.email!,
+                        : _currentUser.email!.split("@")[0],
                     style: GoogleFonts.montserrat(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 15.sp,
@@ -143,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => Settings()
+                            builder: (context) => Profile(user: _currentUser)
                           )
                         );
                       },

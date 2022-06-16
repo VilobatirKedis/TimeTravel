@@ -7,18 +7,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:2508594105:android:b455d15405a18ffad9f468",
+        "mobilesdk_app_id": "1:2508594105:android:d6f5039669b110b4d9f468",
         "android_client_info": {
           "package_name": "com.kedislugini.timetravel"
         }
       },
       "oauth_client": [
         {
-          "client_id": "2508594105-k8ud7hr0dumi75ni6a0mj1qtptuvpki3.apps.googleusercontent.com",
+          "client_id": "2508594105-74bp8gk4ud9ag48eu1ed3h7r4ar9o0su.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.kedislugini.timetravel",
-            "certificate_hash": "a34c8a9db7881ef1d0ce403d18ed1900d39aa207"
+            "certificate_hash": "08f0beb9ccfc262c8febbec1ab50283797c1bc43"
           }
         },
         {

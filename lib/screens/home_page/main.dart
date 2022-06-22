@@ -13,7 +13,7 @@ import 'package:time_travel/utils/authService.dart';
 import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/utils/location.dart';
 import 'package:time_travel/screens/camera/main.dart';
-import 'package:time_travel/screens/map/markers.dart';
+import 'package:time_travel/utils/monumentJSON.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
             ]),
             body: Stack(
               children: [
-                MapComponent(controller: pageController),
+                MapComponent(token: snapshot.data!),
               ],
             ),
             drawer: ClipRRect(
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                             selected: false,
                             selectedTileColor: kSecondaryColor,
                             onTap: () {
-                              getMonuments(snapshot.data!).then((value) => {
+                              getAllMonuments(snapshot.data!).then((value) => {
                                 customDialog(context, value, "API")
                               });
                             },

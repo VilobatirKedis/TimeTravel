@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:time_travel/utils/constants.dart';
 import 'package:tcard/tcard.dart';
-import 'package:time_travel/screens/map/markers.dart';
+import 'package:time_travel/utils/monumentJSON.dart';
 
 
 class VisitedMonuments extends StatelessWidget {
   VisitedMonuments({Key? key}) : super(key: key);
   
   final List<Widget> cards = List.generate(
-    dataMarker.length,
+    1,//dataMarker.length,
     (index) => Container(
       child: Column(
         children: [
-          dataMarker[index].image
+          Text("Ciao")//dataMarker[index].image
         ],
       ),
     ),

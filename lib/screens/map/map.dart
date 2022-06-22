@@ -44,9 +44,6 @@ class _MapComponentState extends State<MapComponent> {
     }
 
     for(var monument in monuments) {
-      print(monument.real_name);
-      print(monument.latitude);
-      print(monument.longitude);
       mapMarkers.add(
         Marker(
           width: 40,

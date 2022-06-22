@@ -1,41 +1,49 @@
 {
   "project_info": {
-    "project_number": "2508594105",
-    "project_id": "time-travel-60e47",
-    "storage_bucket": "time-travel-60e47.appspot.com"
+    "project_number": "886662893264",
+    "project_id": "time-travel-a262e",
+    "storage_bucket": "time-travel-a262e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:2508594105:android:d6f5039669b110b4d9f468",
+        "mobilesdk_app_id": "1:886662893264:android:e16dd3af7234fcd62c98d5",
         "android_client_info": {
           "package_name": "com.kedislugini.timetravel"
         }
       },
       "oauth_client": [
         {
-          "client_id": "2508594105-74bp8gk4ud9ag48eu1ed3h7r4ar9o0su.apps.googleusercontent.com",
+          "client_id": "886662893264-6a524377ibemkchnanp0cpvcp8iut09b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.kedislugini.timetravel",
-            "certificate_hash": "08f0beb9ccfc262c8febbec1ab50283797c1bc43"
+            "certificate_hash": "91c8f27fc0cca764cf82b22ef686c96248e9f1b8"
           }
         },
         {
-          "client_id": "2508594105-pn62j8ai5j5s2neooh7vfron87tm701c.apps.googleusercontent.com",
+          "client_id": "886662893264-rio7tr6ai6ugfvifmcjnstlvan5v98g0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kedislugini.timetravel",
+            "certificate_hash": "2760115d313712c5748b87db2a9b4429055d5ba8"
+          }
+        },
+        {
+          "client_id": "886662893264-fg81agdt1e458m8mt38ajo4cgim056rc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBSTovr5Pcf0h5nZmeOwcwaQjUVrxRN01Y"
+          "current_key": "AIzaSyBd4LYcIsBoYvrjAaYK9f-mGxsjjg96Cc0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "2508594105-pn62j8ai5j5s2neooh7vfron87tm701c.apps.googleusercontent.com",
+              "client_id": "886662893264-fg81agdt1e458m8mt38ajo4cgim056rc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

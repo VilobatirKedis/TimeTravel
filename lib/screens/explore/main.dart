@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:time_travel/utils/constants.dart';
-import 'package:time_travel/utils/markers.dart';
+import 'package:time_travel/screens/map/markers.dart';
 
 class ExplorePage extends StatelessWidget {
   final MapMarker data;
@@ -54,7 +54,7 @@ class ExplorePage extends StatelessWidget {
     );
 
 
-    return Container(
+    /*return Container(
       color: kMainColor,
       child: Column(
         children: [
@@ -87,6 +87,6 @@ class ExplorePage extends StatelessWidget {
           ),
         ],
       ),
-    );
+    );*/
   }
 }

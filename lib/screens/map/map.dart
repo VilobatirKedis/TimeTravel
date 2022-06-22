@@ -10,7 +10,7 @@ import 'package:time_travel/screens/explore/main.dart';
 
 import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/utils/location.dart';
-import 'package:time_travel/utils/markers.dart';
+import 'package:time_travel/screens/map/markers.dart';
 
 
 class MapComponent extends StatefulWidget {
@@ -27,95 +27,10 @@ class _MapComponentState extends State<MapComponent> {
   final String fullPathStyle = 'https://api.mapbox.com/styles/v1/vilokedis/cl37lp0ft000114p1ps7c8uvk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoidmlsb2tlZGlzIiwiYSI6ImNsMmFxNjV2MDA3d2szZXJ1dXBqb2Y4d3kifQ.we7gt1JJFXtMBG9d4mx7TA';
 
   static late PageController currentController;
-  List<Marker> locationMarker = [];
 
   @override
   void initState() {
     currentController = widget.controller;
-    for (var i = 0; i < dataMarker.length; i++) {
-      locationMarker.add(
-        Marker(
-          width: 40,
-          height: 40,
-          point: dataMarker[i].location, 
-          builder: (context) {
-            return GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  backgroundColor: Colors.transparent,
-                  context: context, 
-                  builder: (context) {
-                    return OpenContainer(
-                      closedBuilder: (BuildContext context, void Function() openContainer) {  
-                        return Container(
-                          height: 90.h,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0),
-                            ),
-                            color: kMainColor,
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 2.h),
-                                child: SizedBox(
-                                  width: 45.w,
-                                  height: 0.5.h,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  child: dataMarker[i].image,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 2.h),
-                                child: Text(
-                                  dataMarker[i].title,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: Theme.of(context).textTheme.headline4,
-                                    fontSize: 22.sp,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white
-                                  )
-                                ),
-                              ),
-                              ExploreButton(widgetIn: openContainer,),
-                            ],
-
-                          ),
-                        );
-                      },
-                      closedColor: Colors.transparent,
-                      closedElevation: 0, 
-                      
-                      openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {  
-                        return ExplorePage(data: dataMarker[i]);
-                      },
-                      openColor: Colors.transparent,
-                      openElevation: 0,
-
-                      transitionDuration: Duration(milliseconds: 450),      
-                    );
-                  }
-                );
-              },
-              child: markerImage
-            );
-          }
-        )
-      );
-    }
     super.initState();
   }
 

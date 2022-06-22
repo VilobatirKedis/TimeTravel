@@ -299,7 +299,7 @@ class ThirdPartyLoginButton extends StatelessWidget {
               }
             });
           } catch (e) {
-            customDialog(context, "Error with Google log in", "Error");
+            customDialog(context, "Error with Google log in", e.toString());
           }
         }
       },

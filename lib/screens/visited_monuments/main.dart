@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_travel/utils/constants.dart';
 import 'package:tcard/tcard.dart';
-import 'package:time_travel/utils/markers.dart';
+import 'package:time_travel/screens/map/markers.dart';
 
 
 class VisitedMonuments extends StatelessWidget {

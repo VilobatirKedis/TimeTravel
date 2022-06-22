@@ -79,7 +79,7 @@ class SignUpPage extends StatelessWidget {
                 padding: EdgeInsets.only(top: 7.h),
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
+                    //if (_formKey.currentState!.validate()) {
                       User? user;
                       try {
                         user = await AuthenticationService
@@ -99,7 +99,7 @@ class SignUpPage extends StatelessWidget {
                                   HomePage(user: user!)),
                         );
                       }
-                    }
+                    //}
                   },
                   child: Text(
                     "Sign Up",

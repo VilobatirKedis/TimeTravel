@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:animations/animations.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
@@ -29,6 +31,7 @@ class _MapComponentState extends State<MapComponent> {
 
   @override
   void initState() {
+    final storageRef = FirebaseStorage.instance.ref();
     super.initState();
   }
 
@@ -69,44 +72,55 @@ class _MapComponentState extends State<MapComponent> {
           return FutureBuilder<List<Marker>>(
             future: serializeMonuments(),
             builder: (context, snapshot) {
-              return FlutterMap(
-                layers: [
-                  MarkerLayerOptions(
-                    markers: snapshot.data!
-                  ),
-                ],
-                children: <Widget>[
-                  TileLayerWidget(
-                    options: TileLayerOptions(
-                      keepBuffer: 20,
-                      tileProvider: NetworkTileProvider(),
-                      updateInterval: 100,
-                      urlTemplate: fullPathStyle,
-                      additionalOptions:  {
-                        "accessToken": publicToken,
-                      }
+              if (snapshot.hasData) {
+                return FlutterMap(
+                  layers: [
+                    MarkerLayerOptions(
+                      markers: snapshot.data!
                     ),
-                  ),
-                  LocationMarkerLayerWidget(
-                    options: LocationMarkerLayerOptions(
-                      marker: const DefaultLocationMarker(
-                        color: kSecondaryColor,
+                  ],
+                  children: <Widget>[
+                    TileLayerWidget(
+                      options: TileLayerOptions(
+                        keepBuffer: 20,
+                        tileProvider: NetworkTileProvider(),
+                        updateInterval: 100,
+                        urlTemplate: fullPathStyle,
+                        additionalOptions:  {
+                          "accessToken": publicToken,
+                        }
                       ),
-                      markerSize: const Size(20, 20),
-                      accuracyCircleColor: kSecondaryColor.withOpacity(0.1),
-                      headingSectorColor: kSecondaryColor.withOpacity(0.8),
-                      headingSectorRadius: 50,
-                      markerAnimationDuration: Duration.zero,
                     ),
-                    
-                  )
-                ],
-                options: MapOptions(
-                  center: currentLocation,
-                  rotationThreshold: 50000,
-                  zoom: 10.sp
-                ),
-              );
+                    LocationMarkerLayerWidget(
+                      options: LocationMarkerLayerOptions(
+                        marker: const DefaultLocationMarker(
+                          color: kSecondaryColor,
+                        ),
+                        markerSize: const Size(20, 20),
+                        accuracyCircleColor: kSecondaryColor.withOpacity(0.1),
+                        headingSectorColor: kSecondaryColor.withOpacity(0.8),
+                        headingSectorRadius: 50,
+                        markerAnimationDuration: Duration.zero,
+                      ),
+                      
+                    )
+                  ],
+                  options: MapOptions(
+                    center: currentLocation,
+                    rotationThreshold: 50000,
+                    zoom: 10.sp
+                  ),
+                );
+              }
+
+              else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: kSecondaryColor,
+                    backgroundColor: kMainColor,
+                  ),
+                );
+              }
             }
           );
         }
@@ -139,53 +153,71 @@ class MonumentBottomCard extends StatelessWidget {
           builder: (context) {
             return OpenContainer(
               closedBuilder: (BuildContext context, void Function() openContainer) {  
-                return Container(
-                  height: 90.h,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                    ),
-                    color: kMainColor,
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 2.h),
-                        child: SizedBox(
-                          width: 45.w,
-                          height: 0.5.h,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
-                              color: Colors.white,
-                            ),
+                return FutureBuilder<Uint8List>(
+                  future: getImageOfMonument(monument.id),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData) {  
+                      return Container(
+                        height: 90.h,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
                           ),
+                          color: kMainColor,
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30.0),
-                          child: Text("Ciao"),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 2.h),
+                              child: SizedBox(
+                                width: 45.w,
+                                height: 0.5.h,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30.0),
+                                child: Image.memory(
+                                  snapshot.data!
+                                )
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 2.h),
+                              child: Text(
+                                monument.real_name,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: Theme.of(context).textTheme.headline4,
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white
+                                )
+                              ),
+                            ),
+                            ExploreButton(widgetIn: openContainer),
+                          ],
+                  
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 2.h),
-                        child: Text(
-                          monument.real_name,
-                          style: GoogleFonts.montserrat(
-                            textStyle: Theme.of(context).textTheme.headline4,
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white
-                          )
-                        ),
-                      ),
-                      ExploreButton(widgetIn: openContainer),
-                    ],
+                      );
+                    }
 
-                  ),
+                    else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: kSecondaryColor,
+                          backgroundColor: kMainColor,
+                        ),
+                      );
+                    }
+                  }
                 );
               },
               closedColor: Colors.transparent,

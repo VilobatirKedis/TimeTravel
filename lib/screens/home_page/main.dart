@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:animations/animations.dart';
-import 'package:flutter/foundation.dart' show kDebugMode, kReleaseMode;
+import 'package:flutter/foundation.dart' show kDebugMode;
 
 import 'package:time_travel/screens/authentication/logIn.dart';
 import 'package:time_travel/screens/map/map.dart';
@@ -14,7 +14,6 @@ import 'package:time_travel/utils/authService.dart';
 import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/utils/location.dart';
 import 'package:time_travel/screens/camera/main.dart';
-import 'package:time_travel/utils/monumentJSON.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -35,11 +34,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     setStatusBarColor(Colors.transparent);
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    var pageController = PageController();
 
     return FutureBuilder<String>(
       future: _currentUser.getIdToken(),
@@ -61,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: EdgeInsets.only(top: 87.h),
                 child: OpenContainer(
-                  transitionDuration: Duration(milliseconds: 600),
+                  transitionDuration: const Duration(milliseconds: 600),
                   
                   closedBuilder: (BuildContext context, void Function() openContainer) {  
                     return ScanButton(widgetIn: openContainer);
@@ -126,7 +123,7 @@ class CustomDrawer extends StatelessWidget {
                 width: 50,
                 height: 50,
                 child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    borderRadius: const BorderRadius.all(Radius.circular(50)),
                     child: currentUser.photoURL != null
                         ? Image.network(currentUser.photoURL!)
                         : Image.asset("assets/images/defaultuser.jpg")
@@ -145,7 +142,7 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-          Divider(
+          const Divider(
             thickness: 3,
             indent: 15,
             endIndent: 15,
@@ -165,7 +162,7 @@ class CustomDrawer extends StatelessWidget {
                       customDialog(context, value, "API")
                     });
                   },
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.api_rounded,
                     color: Colors.white,
                   ),
@@ -186,7 +183,7 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.map_rounded,
                     color: Colors.white,
                   ),
@@ -221,7 +218,7 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => Settings()
+                        builder: (context) => const Settings()
                       )
                     );
                   },
@@ -248,11 +245,11 @@ class CustomDrawer extends StatelessWidget {
     
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => LogInPage(),
+                        builder: (context) => const LogInPage(),
                       ),
                     );
                   },
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.logout_rounded,
                     color: Colors.white,
                   ),
@@ -286,7 +283,7 @@ class ScanButton extends StatelessWidget {
       onPressed: () {
         widgetIn();
       },
-      icon: Icon(Icons.camera_alt_rounded),
+      icon: const Icon(Icons.camera_alt_rounded),
       label: Text(
         "SCAN A MONUMENT",
         style: GoogleFonts.montserrat(

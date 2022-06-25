@@ -31,11 +31,14 @@ Future<Uint8List> getImageOfMonument(int monumentID) async {
 
   Uint8List imageData = Uint8List(0);
 
-  await storageRef
+  var response = await http.get(Uri.parse('https://storage.googleapis.com/cms-storage-bucket/75c5b74c32dfd7b7e8f3.jpg'));
+  imageData = response.bodyBytes;
+
+  /*await storageRef
     .child(monumentID.toString() + "_main.jpg")
     .getData(100000000)
     .then((value) => {imageData = value!})
-    .catchError((error) => {print(error.toString())});
+    .catchError((error) => {throw error.toString()});*/
 
   return imageData;
 }

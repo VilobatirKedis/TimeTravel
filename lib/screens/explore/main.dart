@@ -40,7 +40,7 @@ class ExplorePage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: 2.h),
             child: Text(
-              monument.real_name,
+              monument.realName,
               style: GoogleFonts.montserrat(
                 textStyle: Theme.of(context).textTheme.headline4,
                 fontSize: 25.sp,

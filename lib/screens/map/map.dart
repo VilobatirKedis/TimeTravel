@@ -142,7 +142,7 @@ class MonumentBottomCard extends StatelessWidget {
   }) : super(key: key);
 
   final MonumentsData monument;
-  Uint8List imageData = Uint8List(0);
+  Uint8List imageData = Uint8List(255);
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +198,7 @@ class MonumentBottomCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(top: 2.h),
                               child: Text(
-                                monument.real_name,
+                                monument.realName,
                                 style: GoogleFonts.montserrat(
                                   textStyle: Theme.of(context).textTheme.headline4,
                                   fontSize: 22.sp,

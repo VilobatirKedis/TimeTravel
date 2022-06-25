@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+
+
 import 'package:time_travel/screens/camera/photoPreview.dart';
 import 'package:time_travel/utils/constants.dart';
-import 'package:sizer/sizer.dart';
+
 
 
 import '../../main.dart';
@@ -13,6 +13,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class CameraScreen extends StatefulWidget {
+  const CameraScreen({Key? key}) : super(key: key);
+
   @override
   _CameraScreenState createState() => _CameraScreenState();
 }
@@ -50,7 +52,7 @@ class _CameraScreenState extends State<CameraScreen>
     try {
       await cameraController.initialize();
     } on CameraException catch (e) {
-      print('Error initializing camera: $e');
+      throw('Error initializing camera: $e');
     }
 
     // Update the Boolean
@@ -71,8 +73,7 @@ class _CameraScreenState extends State<CameraScreen>
       XFile file = await cameraController.takePicture();
       return file;
     } on CameraException catch (e) {
-      print('Error occured while taking picture: $e');
-      return null;
+      throw('Error occured while taking picture: $e');
     }
   }
 
@@ -109,8 +110,6 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: kMainColor,
       body: _isCameraInitialized
@@ -138,7 +137,7 @@ class _CameraScreenState extends State<CameraScreen>
           alignment: Alignment.center,
           children: [
             Icon(Icons.circle, color: kSecondaryColor.withOpacity(0.5), size: 80),
-            Icon(Icons.circle, color: kSecondaryColor, size: 65),
+            const Icon(Icons.circle, color: kSecondaryColor, size: 65),
           ],
         ),
       ),

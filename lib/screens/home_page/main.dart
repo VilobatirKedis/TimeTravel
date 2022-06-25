@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, kReleaseMode;
 
 import 'package:time_travel/screens/authentication/logIn.dart';
 import 'package:time_travel/screens/map/map.dart';
@@ -84,168 +85,190 @@ class _HomePageState extends State<HomePage> {
             drawer: ClipRRect(
               borderRadius: const BorderRadius.only(
               topRight: Radius.circular(30), bottomRight: Radius.circular(30)),
-              child: Drawer(
-                backgroundColor: kMainColor,
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.h),
-                      child: ListTile(
-                        leading: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                              child: _currentUser.photoURL != null
-                                  ? Image.network(_currentUser.photoURL!)
-                                  : Image.asset("assets/images/defaultuser.jpg")
-                          ),
-                        ),
-                        title: Text(
-                          _currentUser.displayName != null
-                              ? _currentUser.displayName!
-                              : _currentUser.email!.split("@")[0],
-                          style: GoogleFonts.montserrat(
-                            textStyle: Theme.of(context).textTheme.headline4,
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white
-                          )
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      thickness: 3,
-                      indent: 15,
-                      endIndent: 15,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 2.w, top: 2.h),
-                      child: Column(
-                        children: [
-                          ListTile(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:  BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30),)
-                            ),
-                            selected: false,
-                            selectedTileColor: kSecondaryColor,
-                            onTap: () {
-                              getAllMonuments(snapshot.data!).then((value) => {
-                                customDialog(context, value, "API")
-                              });
-                            },
-                            leading: Icon(
-                              Icons.api_rounded,
-                              color: Colors.white,
-                            ),
-                            title: Text("TEST API",
-                                style: GoogleFonts.montserrat(
-                                    textStyle:
-                                        Theme.of(context).textTheme.headline4,
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
-                          ),
-                          ListTile(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:  BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30),)
-                            ),
-                            selected: true,
-                            selectedTileColor: kSecondaryColor,
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            leading: Icon(
-                              Icons.map_rounded,
-                              color: Colors.white,
-                            ),
-                            title: Text("Map",
-                                style: GoogleFonts.montserrat(
-                                    textStyle:
-                                        Theme.of(context).textTheme.headline4,
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Profile(user: _currentUser)
-                                )
-                              );
-                            },
-                            leading: const Icon(
-                              Icons.person_rounded,
-                              color: Colors.white,
-                            ),
-                            title: Text("Profile",
-                                style: GoogleFonts.montserrat(
-                                    textStyle: Theme.of(context).textTheme.headline4,
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Settings()
-                                )
-                              );
-                            },
-                            leading: const Icon(
-                              Icons.settings_rounded,
-                              color: Colors.white,
-                            ),
-                            title: Text("Settings",
-                                style: GoogleFonts.montserrat(
-                                    textStyle:
-                                        Theme.of(context).textTheme.headline4,
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
-                          ),
-                          ListTile(
-                            onTap: () async {
-                              if (_currentUser.providerData[0].providerId
-                                  .contains("google")) {
-                                await AuthenticationService.signOutFromGoogle();
-                              } else {
-                                await FirebaseAuth.instance.signOut();
-                              }
-              
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => LogInPage(),
-                                ),
-                              );
-                            },
-                            leading: Icon(
-                              Icons.logout_rounded,
-                              color: Colors.white,
-                            ),
-                            title: Text("Log Out",
-                                style: GoogleFonts.montserrat(
-                                    textStyle:
-                                        Theme.of(context).textTheme.headline4,
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              ),
+              child: CustomDrawer(currentUser: _currentUser, userToken: snapshot.data!),
             ),
           );
         }
 
-        else return CircularProgressIndicator();
+        else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: kSecondaryColor,
+              backgroundColor: kMainColor,
+            ),
+          );
+        }
       }
+    );
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({
+    Key? key,
+    required this.currentUser, required this.userToken,
+  }) : super(key: key);
+
+  final User currentUser;
+  final String userToken;
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: kMainColor,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 5.h),
+            child: ListTile(
+              leading: SizedBox(
+                width: 50,
+                height: 50,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    child: currentUser.photoURL != null
+                        ? Image.network(currentUser.photoURL!)
+                        : Image.asset("assets/images/defaultuser.jpg")
+                ),
+              ),
+              title: Text(
+                currentUser.displayName != null
+                    ? currentUser.displayName!
+                    : currentUser.email!.split("@")[0],
+                style: GoogleFonts.montserrat(
+                  textStyle: Theme.of(context).textTheme.headline4,
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white
+                )
+              ),
+            ),
+          ),
+          Divider(
+            thickness: 3,
+            indent: 15,
+            endIndent: 15,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 2.w, top: 2.h),
+            child: Column(
+              children: [
+                kDebugMode ? ListTile(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:  BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30),)
+                  ),
+                  selected: false,
+                  selectedTileColor: kSecondaryColor,
+                  onTap: () {
+                    getAllMonuments(userToken).then((value) => {
+                      customDialog(context, value, "API")
+                    });
+                  },
+                  leading: Icon(
+                    Icons.api_rounded,
+                    color: Colors.white,
+                  ),
+                  title: Text("TEST API",
+                      style: GoogleFonts.montserrat(
+                          textStyle:
+                              Theme.of(context).textTheme.headline4,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white)),
+                ) : Container(),
+                ListTile(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:  BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30),)
+                  ),
+                  selected: true,
+                  selectedTileColor: kSecondaryColor,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  leading: Icon(
+                    Icons.map_rounded,
+                    color: Colors.white,
+                  ),
+                  title: Text("Map",
+                      style: GoogleFonts.montserrat(
+                          textStyle:
+                              Theme.of(context).textTheme.headline4,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white)),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Profile(user: currentUser)
+                      )
+                    );
+                  },
+                  leading: const Icon(
+                    Icons.person_rounded,
+                    color: Colors.white,
+                  ),
+                  title: Text("Profile",
+                      style: GoogleFonts.montserrat(
+                          textStyle: Theme.of(context).textTheme.headline4,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white)),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Settings()
+                      )
+                    );
+                  },
+                  leading: const Icon(
+                    Icons.settings_rounded,
+                    color: Colors.white,
+                  ),
+                  title: Text("Settings",
+                      style: GoogleFonts.montserrat(
+                          textStyle:
+                              Theme.of(context).textTheme.headline4,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white)),
+                ),
+                ListTile(
+                  onTap: () async {
+                    if (currentUser.providerData[0].providerId
+                        .contains("google")) {
+                      await AuthenticationService.signOutFromGoogle();
+                    } else {
+                      await FirebaseAuth.instance.signOut();
+                    }
+    
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => LogInPage(),
+                      ),
+                    );
+                  },
+                  leading: Icon(
+                    Icons.logout_rounded,
+                    color: Colors.white,
+                  ),
+                  title: Text("Log Out",
+                      style: GoogleFonts.montserrat(
+                          textStyle:
+                              Theme.of(context).textTheme.headline4,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )
     );
   }
 }

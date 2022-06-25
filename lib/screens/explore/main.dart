@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
@@ -7,9 +9,10 @@ import 'package:time_travel/utils/monumentJSON.dart';
 
 class ExplorePage extends StatelessWidget {
   //final MapMarker data;
-  const ExplorePage({ Key? key, required this.monument}) : super(key: key);
+  const ExplorePage({ Key? key, required this.monument, required this.imageData}) : super(key: key);
 
   final MonumentsData monument;
+  final Uint8List imageData;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,20 @@ class ExplorePage extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-            child: Text("IMMAGINE")//data.image,
+            child: SizedBox(
+              height: 250,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  if(index > 0 && index < 3)return const SizedBox(width: 10);
+                  else return Container();
+                }, 
+                separatorBuilder: (context, index) {
+                  return Image.memory(imageData);
+                }, 
+                itemCount: 4
+              ),
+            )
           ),
           Padding(
             padding: EdgeInsets.only(top: 2.h),

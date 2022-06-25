@@ -137,11 +137,12 @@ class _MapComponentState extends State<MapComponent> {
 }
 
 class MonumentBottomCard extends StatelessWidget {
-  const MonumentBottomCard({
+  MonumentBottomCard({
     Key? key, required this.monument
   }) : super(key: key);
 
   final MonumentsData monument;
+  Uint8List imageData = Uint8List(0);
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +157,8 @@ class MonumentBottomCard extends StatelessWidget {
                 return FutureBuilder<Uint8List>(
                   future: getImageOfMonument(monument.id),
                   builder: (context, snapshot) {
-                    if(snapshot.hasData) {  
+                    if(snapshot.hasData) {
+                      imageData = snapshot.data!;  
                       return Container(
                         height: 90.h,
                         decoration: const BoxDecoration(
@@ -183,11 +185,14 @@ class MonumentBottomCard extends StatelessWidget {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30.0),
-                                child: Image.memory(
-                                  snapshot.data!
-                                )
+                              child: SizedBox(
+                                height: 250,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.memory(
+                                    imageData
+                                  ),
+                                ),
                               ),
                             ),
                             Padding(
@@ -224,7 +229,7 @@ class MonumentBottomCard extends StatelessWidget {
               closedElevation: 0, 
               
               openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {  
-                return ExplorePage(monument: monument);
+                return ExplorePage(monument: monument, imageData: imageData);
               },
               openColor: Colors.transparent,
               openElevation: 0,

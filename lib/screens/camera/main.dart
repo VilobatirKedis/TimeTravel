@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:time_travel/screens/camera/photoPreview.dart';
 import 'package:time_travel/utils/constants.dart';
 
@@ -13,7 +13,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  final User user;
+  const CameraScreen({Key? key, required User this.user}) : super(key: key);
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -29,7 +30,7 @@ class _CameraScreenState extends State<CameraScreen>
     // Instantiating the camera controller
     final CameraController cameraController = CameraController(
       cameraDescription,
-      ResolutionPreset.max,
+      ResolutionPreset.high,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
 
@@ -118,17 +119,20 @@ class _CameraScreenState extends State<CameraScreen>
               child: controller!.buildPreview(),
             )
           : Container(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: InkWell(
         onTap: () async {
           XFile? rawImage = await takePicture();
           File imageFile = File(rawImage!.path);
-
+          //converti risoluzione immagine a 512x288
+          print(rawImage.path);
+          print(imageFile.path);
 
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => PhotoPreview(
                 imagePath: rawImage.path,
+                user: widget.user
               ),
             ),
           );

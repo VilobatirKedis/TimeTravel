@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:animations/animations.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart' show kDebugMode, kReleaseMode;
 
 import 'package:time_travel/screens/authentication/logIn.dart';
 import 'package:time_travel/screens/map/map.dart';
@@ -35,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     setStatusBarColor(Colors.transparent);
-
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return FutureBuilder<String>(
@@ -67,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                   closedColor: Colors.transparent,
               
                   openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {  
-                    return CameraScreen();
+                    return CameraScreen(user: _currentUser,);
                   },
                   openColor: Colors.transparent,
                   openElevation: 0,
@@ -151,14 +150,14 @@ class CustomDrawer extends StatelessWidget {
             padding: EdgeInsets.only(left: 2.w, top: 2.h),
             child: Column(
               children: [
-                kDebugMode ? ListTile(
+                kReleaseMode ? ListTile(
                   shape: const RoundedRectangleBorder(
                     borderRadius:  BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30),)
                   ),
                   selected: false,
                   selectedTileColor: kSecondaryColor,
                   onTap: () {
-                    getAllMonuments(userToken).then((value) => {
+                    getAllMonumentTypes(userToken).then((value) => {
                       customDialog(context, value, "API")
                     });
                   },
@@ -218,7 +217,7 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const Settings()
+                        builder: (context) => Settings()
                       )
                     );
                   },

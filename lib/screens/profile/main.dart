@@ -107,15 +107,106 @@ class Profile extends StatelessWidget {
                       endIndent: 60,
                     ),
                     Padding(
+                      padding:  EdgeInsets.only(top: 1.h),
+                      child: ListTile(
+                        enableFeedback: true,
+                        onTap: () {
+                        },
+                        leading: Icon(Icons.input,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                        title: Text(
+                          "Change Username",
+                          style: GoogleFonts.montserrat(
+                            textStyle: Theme.of(context).textTheme.headline4,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white
+                          )
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:  EdgeInsets.only(top: 1.h),
+                      child: ListTile(
+                        enableFeedback: true,
+                        onTap: () {
+                        },
+                        leading: Icon(
+                          Icons.email_rounded,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                        title: Text(
+                          "Change Email",
+                          style: GoogleFonts.montserrat(
+                            textStyle: Theme.of(context).textTheme.headline4,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white
+                          )
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:  EdgeInsets.only(top: 1.h),
+                      child: ListTile(
+                        enableFeedback: true,
+                        onTap: () {
+                        },
+                        leading: Icon(Icons.verified_rounded,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                        title: Text(
+                          "Verify your email",
+                          style: GoogleFonts.montserrat(
+                            textStyle: Theme.of(context).textTheme.headline4,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white
+                          )
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:  EdgeInsets.only(top: 1.h),
+                      child: ListTile(
+                        enableFeedback: true,
+                        onTap: () {
+                        },
+                        leading: Icon(Icons.password_rounded,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                        title: Text(
+                          "Change Password",
+                          style: GoogleFonts.montserrat(
+                            textStyle: Theme.of(context).textTheme.headline4,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white
+                          )
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      color: kSecondaryColor,
+                      thickness: 2,
+                      indent: 60,
+                      endIndent: 60,
+                    ),
+                    Padding(
                       padding:  EdgeInsets.only(top: 2.h),
                       child: ListTile(
                         enableFeedback: true,
                         onTap: () {
-                          Navigator.of(context).push(
+                          /*Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => VisitedMonuments()
                             )
-                          );
+                          );*/
                         },
                         leading: Icon(
                           Icons.location_city_rounded,
@@ -126,7 +217,7 @@ class Profile extends StatelessWidget {
                           "Visited monuments",
                           style: GoogleFonts.montserrat(
                             textStyle: Theme.of(context).textTheme.headline4,
-                            fontSize: 20.sp,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w300,
                             color: Colors.white
                           )

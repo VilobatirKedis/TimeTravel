@@ -16,6 +16,8 @@ import 'package:time_travel/utils/constants.dart';
 import 'package:time_travel/utils/location.dart';
 import 'package:time_travel/utils/monumentJSON.dart';
 
+List<MonumentsData> monuments = [];
+
 
 class MapComponent extends StatefulWidget {
   const MapComponent({ Key? key, required this.token}) : super(key: key);
@@ -37,13 +39,30 @@ class _MapComponentState extends State<MapComponent> {
 
   Future<List<Marker>> serializeMonuments() async {
     List<dynamic> monumentsMap;
-    List<MonumentsData> monuments = [];
     List<Marker> mapMarkers = [];
 
     var response = await getAllMonuments(widget.token);
+    print("1");
     monumentsMap = jsonDecode(response);
+    var typesMap = jsonDecode(await getAllMonumentTypes(widget.token));
+    print("2");
+    var allTypes = jsonDecode(await getAllTypesOfMonument(widget.token));
+    print("3");
+
     for(var object in monumentsMap[0][0]) {
-      monuments.add(MonumentsData.fromJson(object));
+      MonumentsData monument = MonumentsData.fromJson(object);
+      for(var nObject in typesMap[0][0]) {
+        if(nObject["fk_monument_id"] == monument.id) {
+          for(var typeObject in allTypes[0][0]) {
+            if(nObject["fk_type_id"] == typeObject["types_of_monuments_id"]) {
+              monument.setType = typeObject["types_of_monuments_it_name"];
+              monument.setTypeDescription = typeObject["types_of_monuments_it_description"];
+            }
+          }
+        }
+      }
+
+      monuments.add(monument);
     }
 
     for(var monument in monuments) {
@@ -58,7 +77,7 @@ class _MapComponentState extends State<MapComponent> {
         )
       );
     } 
-
+    print("4");
     return mapMarkers;
   }
 
@@ -68,11 +87,13 @@ class _MapComponentState extends State<MapComponent> {
       future: acquireCurrentLocation(),
       builder: (context, snapshot) {
         if(snapshot.hasData) {
+          print("posizione");
           var currentLocation = snapshot.data!;
           return FutureBuilder<List<Marker>>(
             future: serializeMonuments(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                print("monumenti");
                 return FlutterMap(
                   layers: [
                     MarkerLayerOptions(
@@ -114,6 +135,7 @@ class _MapComponentState extends State<MapComponent> {
               }
 
               else {
+                print("no monumenti");
                 return const Center(
                   child: CircularProgressIndicator(
                     color: kSecondaryColor,
@@ -125,7 +147,8 @@ class _MapComponentState extends State<MapComponent> {
           );
         }
 
-        return const Center(
+        
+        else return const Center(
           child: CircularProgressIndicator(
             color: kSecondaryColor,
             backgroundColor: kMainColor,
@@ -155,7 +178,7 @@ class MonumentBottomCard extends StatelessWidget {
             return OpenContainer(
               closedBuilder: (BuildContext context, void Function() openContainer) {  
                 return FutureBuilder<Uint8List>(
-                  future: getImageOfMonument(monument.id),
+                  future: getMainImageOfMonument(monument.id),
                   builder: (context, snapshot) {
                     if(snapshot.hasData) {
                       imageData = snapshot.data!;  
@@ -229,7 +252,7 @@ class MonumentBottomCard extends StatelessWidget {
               closedElevation: 0, 
               
               openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {  
-                return ExplorePage(monument: monument, imageData: imageData);
+                return ExplorePage(monument: monument, imageData: imageData, mode: "current");
               },
               openColor: Colors.transparent,
               openElevation: 0,

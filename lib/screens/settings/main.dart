@@ -5,7 +5,9 @@ import 'package:time_travel/utils/constants.dart';
 
 
 class Settings extends StatelessWidget {
-  const Settings({ Key? key }) : super(key: key);
+  Settings({ Key? key }) : super(key: key);
+
+  String language = "Italiano";
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +56,84 @@ class Settings extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    ListTile(
-                      onTap: () {
-                        
-                      },
-                      title: Text("Language"),
-                      trailing: Icon(Icons.arrow_drop_down_rounded),
-                    )
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.h),
+                      child: ListTile(
+                        onTap: () {
+                          
+                        },
+                        leading: Icon(
+                          Icons.language_rounded,
+                          color: kSecondaryColor,
+                          size: 25.sp,
+                        ),
+                        title: Text('Language',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 15.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        trailing: Text(language,
+                          style: GoogleFonts.montserrat(
+                            fontSize: 10.sp,
+                            color: Colors.white
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 1.h),
+                      child: ListTile(
+                        onTap: () {
+                          
+                        },
+                        leading: Icon(
+                          Icons.location_on_rounded,
+                          color: kSecondaryColor,
+                          size: 25.sp,
+                        ),
+                        title: Text('Position permissions',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 15.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        trailing: Text("ON",
+                          style: GoogleFonts.montserrat(
+                            fontSize: 10.sp,
+                            color: Colors.white
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 1.h),
+                      child: ListTile(
+                        onTap: () {
+                          
+                        },
+                        leading: Icon(
+                          Icons.camera_rounded,
+                          color: kSecondaryColor,
+                          size: 25.sp,
+                        ),
+                        title: Text('Camera permissions',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 15.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        trailing: Text("ON",
+                          style: GoogleFonts.montserrat(
+                            fontSize: 10.sp,
+                            color: Colors.white
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 )
               )
